@@ -1,14 +1,12 @@
-
-
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="tr">
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Türkiye Roleplay</title>
 
@@ -16,31 +14,43 @@
 
 *{box-sizing:border-box}
 
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111827;color:white;font-family:Arial;touch-action:none}
+body{margin:0;overflow:hidden;font-family:Arial,sans-serif;background:#17242b;color:white}
 
-canvas{width:100%;height:100%;display:block}
+canvas{display:block;width:100vw;height:100vh}
 
-button{background:#172538;color:white;border:1px solid #ffffff40;border-radius:12px;padding:12px 8px;font-weight:bold;font-size:14px}
+#menu{position:fixed;inset:0;background:linear-gradient(145deg,#263e49,#101820);display:flex;align-items:center;justify-content:center;padding:20px}
 
-#hud{position:absolute;top:10px;left:10px;background:#142538ed;padding:10px;border-radius:12px;line-height:1.6;font-size:13px}
+.card{width:100%;max-width:500px;background:#14232c;padding:24px;border-radius:22px;border:1px solid #52636b}
 
-#pad{position:absolute;bottom:15px;left:10px;display:grid;grid-template-columns:50px 50px 50px;gap:5px}
+h1{font-size:36px;margin:0 0 8px;color:#f3c969}
 
-#pad button{height:50px;font-size:21px;padding:0}
+p{color:#c1cdd2;line-height:1.5}
 
-#up{grid-column:2}#left{grid-column:1}#down{grid-column:2}#right{grid-column:3}
+input,select,button{width:100%;padding:13px;margin-top:9px;border-radius:10px;border:0;font-size:16px}
 
-#actions{position:absolute;right:10px;bottom:15px;width:45%;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+input,select{background:#263944;color:white}
 
-#start{position:absolute;inset:0;z-index:5;background:linear-gradient(#102338d9,#08111fee);display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
+button{background:#334b59;color:white;font-weight:bold}
 
-#card{width:100%;max-width:400px;background:#172538;padding:25px 18px;border-radius:22px;border:1px solid #ffffff40}
+.primary{background:#f3c969;color:#17242b}
 
-#card h1{font-size:38px;margin:10px 0}
+#hud{display:none;position:fixed;inset:0;pointer-events:none}
 
-#play{width:100%;padding:17px;background:#078b68;font-size:18px;margin-top:10px}
+#stats{position:absolute;top:12px;left:10px;display:flex;gap:7px;flex-wrap:wrap}
 
-#toast{position:absolute;top:24%;left:50%;transform:translateX(-50%);display:none;background:#172538;padding:12px;border-radius:12px;z-index:4;text-align:center}
+.stat{background:#14232cdd;padding:10px;border-radius:10px;font-size:12px}
+
+.stat b{display:block;color:#f3c969;margin-top:4px}
+
+#controls{position:absolute;left:12px;bottom:20px;display:grid;grid-template-columns:55px 55px 55px;gap:5px;pointer-events:auto}
+
+#controls button{height:48px;padding:0;font-size:22px;background:#14232cdd}
+
+#actions{position:absolute;right:12px;bottom:20px;width:115px;display:grid;gap:7px;pointer-events:auto}
+
+#actions button{font-size:12px;padding:13px 5px}
+
+#message{position:absolute;top:100px;left:50%;transform:translateX(-50%);background:#14232cdd;padding:10px;border-radius:10px;font-size:13px;white-space:nowrap}
 
 </style>
 
@@ -48,132 +58,76 @@ button{background:#172538;color:white;border:1px solid #ffffff40;border-radius:1
 
 <body>
 
-<canvas id="c"></canvas>
+<canvas id="game"></canvas>
 
-<div id="hud">🇹🇷 TÜRKİYE ROLEPLAY<br>💰 Para: <span id="money">500</span> ₺<br>🚶 <span id="mode">Yürüyorsun</span><br>🚗 Hız: <span id="speed">0</span> km/sa</div>
+<div id="menu">
 
-<div id="pad">
+<div class="card">
 
-<button id="up" data-k="up">⬆️</button>
+<h1>🇹🇷 Türkiye Roleplay</h1>
 
-<button id="left" data-k="left">⬅️</button>
+<p>Kendi hikâyeni yaz! Şehirde dolaş, araç sür, meslek seç ve para kazan.</p>
 
-<button id="down" data-k="down">⬇️</button>
+<label>Karakter adı</label>
 
-<button id="right" data-k="right">➡️</button>
+<input id="name" value="Deniz Yılmaz" maxlength="18">
+
+<label>Başlangıç bölgesi</label>
+
+<select id="district">
+
+<option value="center">Şehir Merkezi</option>
+
+<option value="factory">Sanayi Bölgesi</option>
+
+<option value="beach">Sahil Mahallesi</option>
+
+</select>
+
+<button class="primary" onclick="startGame()">ŞEHRE GİR →</button>
+
+<p>🏙️ Açık şehir<br>🚘 Araç sürüşü<br>💼 Meslekler ve ekonomi</p>
+
+</div>
+
+</div>
+
+<div id="hud">
+
+<div id="stats">
+
+<div class="stat">OYUNCU<b id="playerName">Deniz</b></div>
+
+<div class="stat">PARA<b id="money">₺ 2.500</b></div>
+
+<div class="stat">MESLEK<b id="job">Vatandaş</b></div>
+
+</div>
+
+<div id="message">Yön tuşlarıyla hareket et</div>
+
+<div id="controls">
+
+<button style="grid-column:2" ontouchstart="hold('up',event)" ontouchend="release('up',event)" onmousedown="hold('up',event)" onmouseup="release('up',event)">▲</button>
+
+<button ontouchstart="hold('left',event)" ontouchend="release('left',event)" onmousedown="hold('left',event)" onmouseup="release('left',event)">◀</button>
+
+<button ontouchstart="hold('down',event)" ontouchend="release('down',event)" onmousedown="hold('down',event)" onmouseup="release('down',event)">▼</button>
+
+<button ontouchstart="hold('right',event)" ontouchend="release('right',event)" onmousedown="hold('right',event)" onmouseup="release('right',event)">▶</button>
 
 </div>
 
 <div id="actions">
 
-<button id="enter">🚗 ARABAYA BİN</button><button data-k="gas">GAZ 🚀</button>
+<button onclick="toggleCar()">🚘 Araca bin / in</button>
 
-<button id="exit">🚶 İN</button><button data-k="brake">FREN 🛑</button>
+<button onclick="chooseJob()">💼 Meslekler</button>
 
-<button id="job">📦 KURYE İŞİ</button><button id="reset">↻ SIFIRLA</button>
+<button onclick="earn()">💵 Görev yap</button>
 
 </div>
 
-<div id="toast"></div>
-
-<div id="start"><div id="card">
-
-<div style="font-size:48px">🇹🇷 🏙️ 🚘</div>
-
-<h1>TÜRKİYE<br>ROLEPLAY</h1>
-
-<p>Şehirde dolaş • Araba sür • İş yap • Para kazan</p>
-
-<button id="play">OYUNA GİR</button>
-
-<p style="font-size:12px;color:#b8c7d6">Erken prototip sürümü</p>
-
-</div></div>
+</div>
 
 <script>
-
-const c=document.getElementById('c'),g=c.getContext('2d');
-
-let W,H,d=1,started=false,inCar=false,px=100,py=100,cx=100,cy=30,angle=0,speed=0,money=500,job=false,dist=0,keys={};
-
-function resize(){d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;g.setTransform(d,0,0,d,0,0)}
-
-addEventListener('resize',resize);resize();
-
-function hold(el,k){el.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true;try{el.setPointerCapture(e.pointerId)}catch(_){}});['pointerup','pointercancel','lostpointercapture'].forEach(v=>el.addEventListener(v,()=>keys[k]=false))}
-
-document.querySelectorAll('[data-k]').forEach(b=>hold(b,b.dataset.k));
-
-function msg(t){let a=document.getElementById('toast');a.textContent=t;a.style.display='block';clearTimeout(msg.t);msg.t=setTimeout(()=>a.style.display='none',2200)}
-
-document.getElementById('play').onclick=()=>{started=true;document.getElementById('start').style.display='none';msg('Hoş geldin! Arabaya yaklaş ve bin.')};
-
-document.getElementById('enter').onclick=()=>{if(Math.hypot(px-cx,py-cy)<170||!inCar){inCar=true;px=cx;py=cy;msg('Arabaya bindin! Gaz ve yön tuşlarını kullan.')}};
-
-document.getElementById('exit').onclick=()=>{if(inCar){inCar=false;px=cx+60;py=cy;speed=0;msg('Arabadan indin.')}};
-
-document.getElementById('job').onclick=()=>{job=true;dist=0;msg('Kurye işi başladı! 500 metre sür.')};
-
-document.getElementById('reset').onclick=()=>{px=100;py=100;cx=100;cy=30;speed=0;inCar=false;job=false};
-
-function rect(x,y,w,h,col){g.fillStyle=col;g.fillRect(x,y,w,h)}
-
-function car(x,y,s,rot=0){g.save();g.translate(x,y);g.rotate(rot);rect(-s*.55,-s*.9,s*1.1,s*1.8,'#101820');rect(-s*.43,-s*.85,s*.86,s*1.7,'#d83c34');rect(-s*.3,-s*.55,s*.6,s*.35,'#bde9f4');rect(-s*.3,s*.1,s*.6,s*.3,'#bde9f4');rect(-s*.4,-s*.8,s*.18,s*.08,'#fff');rect(s*.22,-s*.8,s*.18,s*.08,'#fff');g.restore()}
-
-function person(x,y){g.fillStyle='#e9b58e';g.beginPath();g.arc(x,y-16,7,0,7);g.fill();rect(x-7,y-8,14,19,'#2477d5');rect(x-6,y+11,5,12,'#263444');rect(x+1,y+11,5,12,'#263444')}
-
-function draw(){
-
-g.clearRect(0,0,W,H);rect(0,0,W,H,'#83b66e');
-
-let camX=inCar?cx:px,camY=inCar?cy:py;
-
-g.save();g.translate(W/2-camX,H/2-camY);
-
-for(let r=-4;r<=4;r++){
-
-let xx=r*300;rect(xx-65,-1500,130,3000,'#555b63');
-
-for(let y=-1500;y<1500;y+=80)rect(xx-3,y,6,32,'#f7f7ed');
-
-let yy=r*300;rect(-1500,yy-65,3000,130,'#555b63');
-
-for(let x=-1500;x<1500;x+=80)rect(x,yy-3,32,6,'#f7f7ed');
-
-}
-
-for(let x=-1200;x<1200;x+=300)for(let y=-1200;y<1200;y+=300){
-
-rect(x+85,y+80,55,65,'#d7c6aa');rect(x+90,y+88,10,10,'#344b60');rect(x+115,y+88,10,10,'#344b60');
-
-rect(x-140,y-130,65,80,'#d5a18f');rect(x-130,y-115,10,10,'#344b60');
-
-g.fillStyle='#438348';g.beginPath();g.arc(x+150,y-130,15,0,Math.PI*2);g.fill();
-
-}
-
-car(cx,cy,28);
-
-if(inCar){car(cx,cy,35,angle);if(keys.gas){speed=Math.min(210,speed+170/60);let ox=cx,oy=cy;cx+=Math.sin(angle)*speed*.035;cy-=Math.cos(angle)*speed*.035;if(job)dist+=Math.hypot(cx-ox,cy-oy)}else speed*=.97;
-
-if(keys.brake)speed*=.90;if(keys.left)angle-=.045;if(keys.right)angle+=.045;
-
-}else{let v=3;if(keys.up)py-=v;if(keys.down)py+=v;if(keys.left)px-=v;if(keys.right)px+=v;person(px,py)}
-
-g.restore();
-
-document.getElementById('mode').textContent=inCar?'Araba kullanıyorsun':'Yürüyorsun';
-
-document.getElementById('speed').textContent=Math.round(Math.abs(speed)*.45);
-
-if(job&&dist>500){job=false;money+=300;document.getElementById('money').textContent=money;msg('Teslimat tamamlandı! +300 ₺')}
-
-requestAnimationFrame(draw)}
-
-draw();
-
-</script>
-
-</body>
-
-</html>
