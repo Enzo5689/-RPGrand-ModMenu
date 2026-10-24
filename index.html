@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 
 <html lang="tr">
@@ -14,21 +16,31 @@
 
 *{box-sizing:border-box}
 
-html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial;background:#87c5dd}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111827;color:white;font-family:Arial;touch-action:none}
 
-canvas{display:block;width:100%;height:100%}
+canvas{width:100%;height:100%;display:block}
 
-.panel{position:absolute;background:#172536ee;color:white;padding:10px;border-radius:12px;line-height:1.6}
+button{background:#172538;color:white;border:1px solid #ffffff40;border-radius:12px;padding:12px 8px;font-weight:bold;font-size:14px}
 
-#hud{top:10px;left:10px}
+#hud{position:absolute;top:10px;left:10px;background:#142538ed;padding:10px;border-radius:12px;line-height:1.6;font-size:13px}
 
-#buttons{position:absolute;bottom:12px;right:10px;display:grid;grid-template-columns:1fr 1fr;gap:7px;width:48%}
+#pad{position:absolute;bottom:15px;left:10px;display:grid;grid-template-columns:50px 50px 50px;gap:5px}
 
-button{background:#172536;color:white;border:0;border-radius:12px;padding:15px 8px;font-weight:bold;font-size:14px}
+#pad button{height:50px;font-size:21px;padding:0}
 
-#move{position:absolute;bottom:20px;left:10px;display:grid;grid-template-columns:52px 52px;gap:6px}
+#up{grid-column:2}#left{grid-column:1}#down{grid-column:2}#right{grid-column:3}
 
-#move button{height:50px;font-size:22px;padding:0}
+#actions{position:absolute;right:10px;bottom:15px;width:45%;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+
+#start{position:absolute;inset:0;z-index:5;background:linear-gradient(#102338d9,#08111fee);display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
+
+#card{width:100%;max-width:400px;background:#172538;padding:25px 18px;border-radius:22px;border:1px solid #ffffff40}
+
+#card h1{font-size:38px;margin:10px 0}
+
+#play{width:100%;padding:17px;background:#078b68;font-size:18px;margin-top:10px}
+
+#toast{position:absolute;top:24%;left:50%;transform:translateX(-50%);display:none;background:#172538;padding:12px;border-radius:12px;z-index:4;text-align:center}
 
 </style>
 
@@ -38,77 +50,127 @@ button{background:#172536;color:white;border:0;border-radius:12px;padding:15px 8
 
 <canvas id="c"></canvas>
 
-<div id="hud" class="panel">🇹🇷 TÜRKİYE ROLEPLAY<br>💰 Para: <span id="money">500</span> ₺<br>🚶 Durum: <span id="state">Yürüyorsun</span><br>🚗 Hız: <span id="speed">0</span></div>
+<div id="hud">🇹🇷 TÜRKİYE ROLEPLAY<br>💰 Para: <span id="money">500</span> ₺<br>🚶 <span id="mode">Yürüyorsun</span><br>🚗 Hız: <span id="speed">0</span> km/sa</div>
 
-<div id="move">
+<div id="pad">
 
-<button id="up">⬆️</button><button id="down">⬇️</button>
+<button id="up" data-k="up">⬆️</button>
 
-<button id="left">⬅️</button><button id="right">➡️</button>
+<button id="left" data-k="left">⬅️</button>
+
+<button id="down" data-k="down">⬇️</button>
+
+<button id="right" data-k="right">➡️</button>
+
+</div>
+
+<div id="actions">
+
+<button id="enter">🚗 ARABAYA BİN</button><button data-k="gas">GAZ 🚀</button>
+
+<button id="exit">🚶 İN</button><button data-k="brake">FREN 🛑</button>
+
+<button id="job">📦 KURYE İŞİ</button><button id="reset">↻ SIFIRLA</button>
 
 </div>
 
-<div id="buttons">
+<div id="toast"></div>
 
-<button id="enter">ARABAYA BİN 🚗</button><button id="gas">GAZ 🚀</button>
+<div id="start"><div id="card">
 
-<button id="exit">ARABADAN İN</button><button id="brake">FREN 🛑</button>
+<div style="font-size:48px">🇹🇷 🏙️ 🚘</div>
 
-<button id="job">KURYE GÖREVİ 📦</button><button id="reset">SIFIRLA ↻</button>
+<h1>TÜRKİYE<br>ROLEPLAY</h1>
 
-</div>
+<p>Şehirde dolaş • Araba sür • İş yap • Para kazan</p>
+
+<button id="play">OYUNA GİR</button>
+
+<p style="font-size:12px;color:#b8c7d6">Erken prototip sürümü</p>
+
+</div></div>
 
 <script>
 
 const c=document.getElementById('c'),g=c.getContext('2d');
 
-let W,H,d=1,walkingX=0,walkingY=0,inCar=false,speed=0,move=0,money=500,job=false,dist=0,keys={};
+let W,H,d=1,started=false,inCar=false,px=100,py=100,cx=100,cy=30,angle=0,speed=0,money=500,job=false,dist=0,keys={};
 
 function resize(){d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;g.setTransform(d,0,0,d,0,0)}
 
 addEventListener('resize',resize);resize();
 
-function box(x,y,w,h,col){g.fillStyle=col;g.fillRect(x,y,w,h)}
+function hold(el,k){el.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true;try{el.setPointerCapture(e.pointerId)}catch(_){}});['pointerup','pointercancel','lostpointercapture'].forEach(v=>el.addEventListener(v,()=>keys[k]=false))}
 
-function car(x,y,s){box(x-s*.6,y-s*.4,s*1.2,s*1.8,'#171d24');box(x-s*.48,y-s*.5,s*.96,s*1.7,'#d83e36');box(x-s*.31,y-s*.35,s*.62,s*.35,'#b8e6f3');box(x-s*.31,y+s*.12,s*.62,s*.28,'#b8e6f3');box(x-s*.4,y-s*.47,s*.18,s*.07,'#fff');box(x+s*.22,y-s*.47,s*.18,s*.07,'#fff')}
+document.querySelectorAll('[data-k]').forEach(b=>hold(b,b.dataset.k));
 
-function person(x,y,s){g.fillStyle='#edbd97';g.beginPath();g.arc(x,y-s*.55,s*.22,0,Math.PI*2);g.fill();box(x-s*.2,y-s*.3,s*.4,s*.48,'#2674d8');box(x-s*.18,y+s*.15,s*.14,s*.4,'#273444');box(x+s*.04,y+s*.15,s*.14,s*.4,'#273444');box(x-s*.31,y-s*.25,s*.12,s*.35,'#edbd97');box(x+s*.19,y-s*.25,s*.12,s*.35,'#edbd97');g.fillStyle='#382a20';g.beginPath();g.arc(x,y-s*.62,s*.23,Math.PI,Math.PI*2);g.fill()}
+function msg(t){let a=document.getElementById('toast');a.textContent=t;a.style.display='block';clearTimeout(msg.t);msg.t=setTimeout(()=>a.style.display='none',2200)}
 
-function hold(id,key){let b=document.getElementById(id);b.onpointerdown=e=>{e.preventDefault();keys[key]=true;b.setPointerCapture(e.pointerId)};['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>keys[key]=false))}
+document.getElementById('play').onclick=()=>{started=true;document.getElementById('start').style.display='none';msg('Hoş geldin! Arabaya yaklaş ve bin.')};
 
-['up','down','left','right','gas','brake'].forEach(k=>hold(k,k));
+document.getElementById('enter').onclick=()=>{if(Math.hypot(px-cx,py-cy)<170||!inCar){inCar=true;px=cx;py=cy;msg('Arabaya bindin! Gaz ve yön tuşlarını kullan.')}};
+
+document.getElementById('exit').onclick=()=>{if(inCar){inCar=false;px=cx+60;py=cy;speed=0;msg('Arabadan indin.')}};
+
+document.getElementById('job').onclick=()=>{job=true;dist=0;msg('Kurye işi başladı! 500 metre sür.')};
+
+document.getElementById('reset').onclick=()=>{px=100;py=100;cx=100;cy=30;speed=0;inCar=false;job=false};
+
+function rect(x,y,w,h,col){g.fillStyle=col;g.fillRect(x,y,w,h)}
+
+function car(x,y,s,rot=0){g.save();g.translate(x,y);g.rotate(rot);rect(-s*.55,-s*.9,s*1.1,s*1.8,'#101820');rect(-s*.43,-s*.85,s*.86,s*1.7,'#d83c34');rect(-s*.3,-s*.55,s*.6,s*.35,'#bde9f4');rect(-s*.3,s*.1,s*.6,s*.3,'#bde9f4');rect(-s*.4,-s*.8,s*.18,s*.08,'#fff');rect(s*.22,-s*.8,s*.18,s*.08,'#fff');g.restore()}
+
+function person(x,y){g.fillStyle='#e9b58e';g.beginPath();g.arc(x,y-16,7,0,7);g.fill();rect(x-7,y-8,14,19,'#2477d5');rect(x-6,y+11,5,12,'#263444');rect(x+1,y+11,5,12,'#263444')}
 
 function draw(){
 
-g.clearRect(0,0,W,H);
+g.clearRect(0,0,W,H);rect(0,0,W,H,'#83b66e');
 
-let sky=g.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#75bee8');sky.addColorStop(.5,'#d9edf2');sky.addColorStop(.51,'#86b873');sky.addColorStop(1,'#659657');g.fillStyle=sky;g.fillRect(0,0,W,H);
+let camX=inCar?cx:px,camY=inCar?cy:py;
 
-box(W*.30,H*.38,W*.40,H*.62,'#555b62');box(W*.275,H*.38,W*.025,H*.62,'#bdb9aa');box(W*.70,H*.38,W*.025,H*.62,'#bdb9aa');
+g.save();g.translate(W/2-camX,H/2-camY);
 
-for(let i=0;i<9;i++){let y=H*.40+i*H*.075;box(W*.495,y,W*.01,15+i*2,'#fff')}
+for(let r=-4;r<=4;r++){
 
-for(let side of [-1,1])for(let i=0;i<7;i++){let xx=W/2+side*(W*.25+i*W*.035),yy=H*.43+i*H*.055,bw=18+i*5,bh=35+i*13;box(xx-bw/2,yy-bh,bw,bh,['#d2bca0','#d4a18e','#aebdca'][i%3]);for(let j=0;j<2;j++)box(xx-bw*.25+j*bw*.4,yy-bh*.75,bw*.15,bh*.12,'#344b60')}
+let xx=r*300;rect(xx-65,-1500,130,3000,'#555b63');
 
-car(W*.50,H*.72,Math.min(65,W*.12));
+for(let y=-1500;y<1500;y+=80)rect(xx-3,y,6,32,'#f7f7ed');
 
-if(inCar){car(W*.50,H*.83,Math.min(75,W*.13));if(keys.gas){speed=Math.min(120,speed+0.3);move+=speed*.05;if(job)dist+=speed*.05}else speed=Math.max(0,speed-(keys.brake?.8:.1))}
+let yy=r*300;rect(-1500,yy-65,3000,130,'#555b63');
 
-else{let v=2.5;if(keys.up)walkingY-=v;if(keys.down)walkingY+=v;if(keys.left)walkingX-=v;if(keys.right)walkingX+=v;person(W*.5+walkingX,H*.81+walkingY,30)}
+for(let x=-1500;x<1500;x+=80)rect(x,yy-3,32,6,'#f7f7ed');
 
-document.getElementById('speed').textContent=Math.round(speed)+' km/sa';
+}
+
+for(let x=-1200;x<1200;x+=300)for(let y=-1200;y<1200;y+=300){
+
+rect(x+85,y+80,55,65,'#d7c6aa');rect(x+90,y+88,10,10,'#344b60');rect(x+115,y+88,10,10,'#344b60');
+
+rect(x-140,y-130,65,80,'#d5a18f');rect(x-130,y-115,10,10,'#344b60');
+
+g.fillStyle='#438348';g.beginPath();g.arc(x+150,y-130,15,0,Math.PI*2);g.fill();
+
+}
+
+car(cx,cy,28);
+
+if(inCar){car(cx,cy,35,angle);if(keys.gas){speed=Math.min(210,speed+170/60);let ox=cx,oy=cy;cx+=Math.sin(angle)*speed*.035;cy-=Math.cos(angle)*speed*.035;if(job)dist+=Math.hypot(cx-ox,cy-oy)}else speed*=.97;
+
+if(keys.brake)speed*=.90;if(keys.left)angle-=.045;if(keys.right)angle+=.045;
+
+}else{let v=3;if(keys.up)py-=v;if(keys.down)py+=v;if(keys.left)px-=v;if(keys.right)px+=v;person(px,py)}
+
+g.restore();
+
+document.getElementById('mode').textContent=inCar?'Araba kullanıyorsun':'Yürüyorsun';
+
+document.getElementById('speed').textContent=Math.round(Math.abs(speed)*.45);
+
+if(job&&dist>500){job=false;money+=300;document.getElementById('money').textContent=money;msg('Teslimat tamamlandı! +300 ₺')}
 
 requestAnimationFrame(draw)}
 
 draw();
-
-document.getElementById('enter').onclick=()=>{inCar=true;document.getElementById('state').textContent='Araba kullanıyorsun';alert('Arabaya bindin! GAZ tuşuna bas.')};
-
-document.getElementById('exit').onclick=()=>{inCar=false;speed=0;document.getElementById('state').textContent='Yürüyorsun'};
-
-document.getElementById('job').onclick=()=>{job=true;dist=0;alert('Kurye işi başladı! 300 metre sür.')};
-
-document.getElementById('reset').onclick=()=>{walkingX=0;walkingY=0;speed=0;inCar=false;job=false;document.getElementById('state').textContent='Yürüyorsun'};
 
 </script>
 
