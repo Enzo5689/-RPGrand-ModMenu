@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  background: #111;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+.menu {
+  background: #222;
+  padding: 25px;
+  border: 2px solid red;
+  border-radius: 15px;
+  margin-top: 60px;
+}
+button {
+  padding: 15px;
+  margin: 10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 10px;
+}
+</style>
+</head>
+<body>
+<div class="menu">
+  <h2>🔥 RP MOD MENU 🔥</h2>
+  <button onclick="toggle(this)">🎯 Crosshair: OFF</button>
+  <button onclick="toggle(this)">🌈 RGB Menu: OFF</button>
+  <button onclick="toggle(this)">📱 Floating Menu: OFF</button>
+</div>
+<script>
+function toggle(btn) {
+  btn.dataset.on = btn.dataset.on === "true" ? "false" : "true";
+  btn.textContent = btn.textContent.split(":")[0] +
+    (btn.dataset.on === "true" ? ": ON" : ": OFF");
+}
+</script>
+</body>
+</html>
