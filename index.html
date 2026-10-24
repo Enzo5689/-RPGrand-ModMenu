@@ -1,133 +1,263 @@
-<!DOCTYPE html>
-
-<html lang="tr">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Türkiye Roleplay</title>
-
-<style>
-
-*{box-sizing:border-box}
-
-body{margin:0;overflow:hidden;font-family:Arial,sans-serif;background:#17242b;color:white}
-
-canvas{display:block;width:100vw;height:100vh}
-
-#menu{position:fixed;inset:0;background:linear-gradient(145deg,#263e49,#101820);display:flex;align-items:center;justify-content:center;padding:20px}
-
-.card{width:100%;max-width:500px;background:#14232c;padding:24px;border-radius:22px;border:1px solid #52636b}
-
-h1{font-size:36px;margin:0 0 8px;color:#f3c969}
-
-p{color:#c1cdd2;line-height:1.5}
-
-input,select,button{width:100%;padding:13px;margin-top:9px;border-radius:10px;border:0;font-size:16px}
-
-input,select{background:#263944;color:white}
-
-button{background:#334b59;color:white;font-weight:bold}
-
-.primary{background:#f3c969;color:#17242b}
-
-#hud{display:none;position:fixed;inset:0;pointer-events:none}
-
-#stats{position:absolute;top:12px;left:10px;display:flex;gap:7px;flex-wrap:wrap}
-
-.stat{background:#14232cdd;padding:10px;border-radius:10px;font-size:12px}
-
-.stat b{display:block;color:#f3c969;margin-top:4px}
-
-#controls{position:absolute;left:12px;bottom:20px;display:grid;grid-template-columns:55px 55px 55px;gap:5px;pointer-events:auto}
-
-#controls button{height:48px;padding:0;font-size:22px;background:#14232cdd}
-
-#actions{position:absolute;right:12px;bottom:20px;width:115px;display:grid;gap:7px;pointer-events:auto}
-
-#actions button{font-size:12px;padding:13px 5px}
-
-#message{position:absolute;top:100px;left:50%;transform:translateX(-50%);background:#14232cdd;padding:10px;border-radius:10px;font-size:13px;white-space:nowrap}
-
-</style>
-
-</head>
-
-<body>
-
-<canvas id="game"></canvas>
-
-<div id="menu">
-
-<div class="card">
-
-<h1>🇹🇷 Türkiye Roleplay</h1>
-
-<p>Kendi hikâyeni yaz! Şehirde dolaş, araç sür, meslek seç ve para kazan.</p>
-
-<label>Karakter adı</label>
-
-<input id="name" value="Deniz Yılmaz" maxlength="18">
-
-<label>Başlangıç bölgesi</label>
-
-<select id="district">
-
-<option value="center">Şehir Merkezi</option>
-
-<option value="factory">Sanayi Bölgesi</option>
-
-<option value="beach">Sahil Mahallesi</option>
-
-</select>
-
-<button class="primary" onclick="startGame()">ŞEHRE GİR →</button>
-
-<p>🏙️ Açık şehir<br>🚘 Araç sürüşü<br>💼 Meslekler ve ekonomi</p>
-
-</div>
-
-</div>
-
-<div id="hud">
-
-<div id="stats">
-
-<div class="stat">OYUNCU<b id="playerName">Deniz</b></div>
-
-<div class="stat">PARA<b id="money">₺ 2.500</b></div>
-
-<div class="stat">MESLEK<b id="job">Vatandaş</b></div>
-
-</div>
-
-<div id="message">Yön tuşlarıyla hareket et</div>
-
-<div id="controls">
-
-<button style="grid-column:2" ontouchstart="hold('up',event)" ontouchend="release('up',event)" onmousedown="hold('up',event)" onmouseup="release('up',event)">▲</button>
-
-<button ontouchstart="hold('left',event)" ontouchend="release('left',event)" onmousedown="hold('left',event)" onmouseup="release('left',event)">◀</button>
-
-<button ontouchstart="hold('down',event)" ontouchend="release('down',event)" onmousedown="hold('down',event)" onmouseup="release('down',event)">▼</button>
-
-<button ontouchstart="hold('right',event)" ontouchend="release('right',event)" onmousedown="hold('right',event)" onmouseup="release('right',event)">▶</button>
-
-</div>
-
-<div id="actions">
-
-<button onclick="toggleCar()">🚘 Araca bin / in</button>
-
-<button onclick="chooseJob()">💼 Meslekler</button>
-
-<button onclick="earn()">💵 Görev yap</button>
-
-</div>
-
-</div>
-
 <script>
+
+const canvas = document.getElementById("game");
+
+const ctx = canvas.getContext("2d");
+
+let x = 0, y = 0, carX = 80, carY = 40;
+
+let carMode = false, money = 2500;
+
+let job = "Vatandaş", playerName = "Deniz";
+
+let keys = {};
+
+let started = false;
+
+function resize() {
+
+  canvas.width = window.innerWidth;
+
+  canvas.height = window.innerHeight;
+
+  canvas.style.width = innerWidth + "px";
+
+  canvas.style.height = innerHeight + "px";
+
+}
+
+window.addEventListener("resize", resize);
+
+resize();
+
+function startGame() {
+
+  playerName = document.getElementById("name").value.trim() || "Oyuncu";
+
+  const district = document.getElementById("district").value;
+
+  if (district === "factory") { x = 500; y = 300; }
+
+  else if (district === "beach") { x = -300; y = 200; }
+
+  else { x = 0; y = 0; }
+
+  carX = x + 80;
+
+  carY = y + 40;
+
+  document.getElementById("playerName").textContent = playerName;
+
+  document.getElementById("menu").style.display = "none";
+
+  document.getElementById("hud").style.display = "block";
+
+  started = true;
+
+  requestAnimationFrame(loop);
+
+}
+
+function hold(direction, event) {
+
+  if (event) event.preventDefault();
+
+  keys[direction] = true;
+
+}
+
+function release(direction, event) {
+
+  if (event) event.preventDefault();
+
+  keys[direction] = false;
+
+}
+
+document.addEventListener("keydown", e => {
+
+  if (e.key.includes("Arrow")) e.preventDefault();
+
+  if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") keys.up = true;
+
+  if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") keys.down = true;
+
+  if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") keys.left = true;
+
+  if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") keys.right = true;
+
+});
+
+document.addEventListener("keyup", e => {
+
+  if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") keys.up = false;
+
+  if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") keys.down = false;
+
+  if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") keys.left = false;
+
+  if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") keys.right = false;
+
+});
+
+function toggleCar() {
+
+  carMode = !carMode;
+
+  if (carMode) {
+
+    carX = x + 20;
+
+    carY = y;
+
+    document.getElementById("message").textContent = "Araba sürüyorsun!";
+
+  } else {
+
+    x = carX + 35;
+
+    y = carY + 20;
+
+    document.getElementById("message").textContent = "Yürüyorsun!";
+
+  }
+
+}
+
+function chooseJob() {
+
+  const jobs = ["Kurye", "Taksici", "Kamyoncu", "Esnaf"];
+
+  job = jobs[Math.floor(Math.random() * jobs.length)];
+
+  document.getElementById("job").textContent = job;
+
+  document.getElementById("message").textContent = "Mesleğin: " + job;
+
+}
+
+function earn() {
+
+  money += job === "Kamyoncu" ? 850 : job === "Taksici" ? 600 : 450;
+
+  document.getElementById("money").textContent =
+
+    "₺ " + money.toLocaleString("tr-TR");
+
+  document.getElementById("message").textContent = "Görev tamamlandı! Para kazandın.";
+
+}
+
+function loop() {
+
+  if (!started) return;
+
+  const speed = carMode ? 5 : 3;
+
+  let dx = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+
+  let dy = (keys.down ? 1 : 0) - (keys.up ? 1 : 0);
+
+  if (carMode) {
+
+    carX += dx * speed;
+
+    carY += dy * speed;
+
+  } else {
+
+    x += dx * speed;
+
+    y += dy * speed;
+
+  }
+
+  const px = carMode ? carX : x;
+
+  const py = carMode ? carY : y;
+
+  const w = canvas.width, h = canvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  ctx.fillStyle = "#789777";
+
+  ctx.fillRect(0, 0, w, h);
+
+  // Şehir yolları
+
+  ctx.fillStyle = "#454f56";
+
+  for (let i = -1000; i < 2000; i += 240) {
+
+    ctx.fillRect(i - px + w/2, 0, 65, h);
+
+    ctx.fillRect(0, i - py + h/2, w, 65);
+
+  }
+
+  // Binalar
+
+  for (let i = -5; i < 7; i++) {
+
+    for (let j = -5; j < 7; j++) {
+
+      const bx = i * 240 + 90 - px + w/2;
+
+      const by = j * 240 + 90 - py + h/2;
+
+      ctx.fillStyle = "#b6b6a5";
+
+      ctx.fillRect(bx, by, 90, 100);
+
+      ctx.fillStyle = "#f3d89b";
+
+      ctx.fillRect(bx+12, by+12, 16, 16);
+
+      ctx.fillRect(bx+40, by+12, 16, 16);
+
+      ctx.fillRect(bx+12, by+45, 16, 16);
+
+      ctx.fillRect(bx+40, by+45, 16, 16);
+
+    }
+
+  }
+
+  // Oyuncu veya araba
+
+  if (carMode) {
+
+    ctx.fillStyle = "#d94343";
+
+    ctx.fillRect(w/2-24, h/2-14, 48, 28);
+
+    ctx.fillStyle = "#b9e3ee";
+
+    ctx.fillRect(w/2-12, h/2-10, 24, 20);
+
+  } else {
+
+    ctx.fillStyle = "#f1c7a0";
+
+    ctx.beginPath();
+
+    ctx.arc(w/2, h/2, 10, 0, Math.PI*2);
+
+    ctx.fill();
+
+    ctx.fillStyle = "#287c65";
+
+    ctx.fillRect(w/2-8, h/2+5, 16, 15);
+
+  }
+
+  requestAnimationFrame(loop);
+
+}
+
+</script>
+
+</body>
+
+</html>
