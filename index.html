@@ -1,387 +1,293 @@
-doctype html>
 
+<!doctype html>
 <html lang="tr">
-
 <head>
-
 <meta charset="utf-8">
-
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-
-<meta name="theme-color" content="#0b141b">
-
-<title>Türkiye Roleplay — Yeni Sürüm</title>
-
+<meta name="theme-color" content="#08121d">
+<title>Türkiye Roleplay V14</title>
 <style>
-
-:root{--gold:#f3c969;--mint:#78e4c0;--bg:#0b141b;--panel:#14232c;--line:#ffffff20}
-
+:root{--gold:#ffd778;--mint:#69f2d0;--panel:#0d1c2aef}
 *{box-sizing:border-box}
-
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:#f4f7fa;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;touch-action:manipulation}
-
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#09131e;color:#f5f8fc;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
 button,input,select{font:inherit}
-
-button{border:0;border-radius:13px;padding:13px 15px;font-weight:800;color:#f7fbfc;background:#2b414e;box-shadow:0 4px 0 #0b1217;cursor:pointer}
-
-button:active{transform:translateY(2px);box-shadow:0 2px 0 #0b1217}
-
-.gold{background:var(--gold);color:#182027}
-
-.green{background:var(--mint);color:#12231f}
-
+button{cursor:pointer;border:0;border-radius:13px;padding:13px;background:#203749;color:#fff;font-weight:800;touch-action:manipulation}
+button:active{transform:scale(.98)}
 #game{position:fixed;inset:0;width:100%;height:100%;display:block}
-
-#login{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(ellipse at 50% 5%,#405a66 0%,#1a2c36 43%,#091117 100%);overflow:auto}
-
-.login-card{width:min(560px,100%);border:1px solid #ffffff26;border-radius:26px;background:linear-gradient(145deg,#192b36f5,#101b23f8);box-shadow:0 28px 90px #0009;padding:22px}
-
-.brand{display:flex;align-items:center;gap:13px;margin-bottom:12px}
-
-.mark{width:55px;height:55px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#ffe8a6,#d9a844);color:#19252b;font-weight:1000;font-size:23px;box-shadow:inset 0 1px #fff9}
-
-.kicker{font-size:10px;font-weight:900;letter-spacing:2.2px;color:var(--mint)}
-
-h1{font-size:clamp(29px,7vw,43px);line-height:1;margin:5px 0;letter-spacing:-1.4px}
-
+#login{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;overflow:auto;padding:18px;background:radial-gradient(ellipse at 80% 10%,#1b6170 0,#102938 35%,#070e17 78%)}
+.card{width:min(560px,100%);max-height:96dvh;overflow:auto;padding:clamp(18px,4vw,28px);border:1px solid #68d9df45;border-radius:25px;background:linear-gradient(145deg,#112433f5,#091620f7);box-shadow:0 20px 80px #0009}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#fff0ad,#e8ac3c);color:#14202a;font-weight:1000;font-size:20px}
+.tag{font-size:10px;letter-spacing:2px;color:var(--mint);font-weight:900}
+h1{font-size:clamp(30px,7vw,46px);line-height:1.02;letter-spacing:-1.5px;margin:7px 0}
 h1 span{color:var(--gold)}
-
-.desc{font-size:13px;color:#b8c8d0;line-height:1.55;margin:12px 0 18px}
-
-.hero{height:120px;border-radius:17px;overflow:hidden;position:relative;margin:0 0 17px;background:linear-gradient(180deg,#5d8190,#b5b99a 62%,#3e5b4d 63%,#293b40)}
-
-.hero:before{content:"";position:absolute;left:-5%;right:-5%;height:48px;bottom:0;background:#344147;transform:skewY(-5deg)}
-
-.tower{position:absolute;bottom:36px;width:35px;background:#2c414c;border:1px solid #80949a55;box-shadow:inset 0 0 0 5px #ffffff08}
-
-.tower:after{content:"";position:absolute;inset:8px 6px;background:repeating-linear-gradient(90deg,#e7ca7d 0 3px,transparent 3px 9px),repeating-linear-gradient(0deg,transparent 0 9px,#ffffff1b 9px 11px)}
-
-.tower.t1{height:66px;left:14%}
-
-.tower.t2{height:91px;left:24%;width:43px}
-
-.tower.t3{height:54px;left:37%;width:30px}
-
-.tower.t4{height:78px;right:25%;width:39px}
-
-.tower.t5{height:55px;right:14%;width:34px}
-
-.hero-label{position:absolute;bottom:10px;left:13px;font-size:10px;font-weight:900;letter-spacing:1.6px;color:white;text-shadow:0 2px 5px #000}
-
+.sub{color:#b3c5d0;font-size:13px;line-height:1.6}
+.city-art{height:105px;border-radius:16px;margin:16px 0;overflow:hidden;position:relative;background:linear-gradient(#123c53 0 55%,#1d5360 56% 68%,#14252d 69%)}
+.city-art:before{content:"";position:absolute;inset:15px 0 15px;background:repeating-linear-gradient(90deg,#081923 0 18px,#183746 18px 34px,#091b26 34px 49px);clip-path:polygon(0 35%,7% 35%,7% 5%,14% 5%,14% 24%,24% 24%,24% 0,35% 0,35% 40%,46% 40%,46% 15%,59% 15%,59% 0,70% 0,70% 31%,81% 31%,81% 10%,91% 10%,91% 36%,100% 36%,100% 100%,0 100%)}
+.city-art:after{content:"";position:absolute;left:48%;bottom:-20px;width:30%;height:85px;background:#303c43;transform:perspective(70px) rotateX(8deg);border-top:3px dashed #f8d37a}
+.city-art b{position:absolute;left:12px;bottom:10px;font-size:9px;letter-spacing:2px;z-index:1;color:#bfe7ec}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-.field{display:flex;flex-direction:column;gap:6px;color:#aebfc8;font-size:11px;font-weight:800;letter-spacing:.5px}
-
-input,select{width:100%;min-width:0;padding:12px 11px;background:#0b171e;color:#fff;border:1px solid #ffffff22;border-radius:12px;outline:none;font-size:14px}
-
-input:focus,select:focus{border-color:var(--gold)}
-
-.role-title{margin:16px 0 8px;color:#aebfc8;font-size:11px;font-weight:900;letter-spacing:1.3px}
-
+.field{display:grid;gap:7px;color:#aec0ca;font-size:11px;font-weight:900;letter-spacing:.5px}
+input,select{width:100%;min-width:0;padding:13px;border:1px solid #294758;border-radius:12px;background:#08141e;color:#fff;font-size:14px}
+.label{margin:16px 0 9px;font-size:11px;letter-spacing:1.5px;color:#b9cbd5;font-weight:900}
 .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-
-.role{padding:10px 5px;border:1px solid #ffffff1c;background:#10202a;border-radius:13px;text-align:center;color:#d9e4e9;font-size:11px;line-height:1.35;box-shadow:none}
-
+.role{padding:11px 4px;border:1px solid #294657;background:#102433;font-size:11px;box-shadow:none}
 .role strong{display:block;font-size:21px;margin-bottom:4px}
-
-.role.active{border-color:var(--gold);background:#3b321f;color:#ffe6a0}
-
-.start-row{display:flex;gap:9px;margin-top:15px}
-
-.start-row button:first-child{flex:1.4}
-
-.start-row button:last-child{flex:1}
-
-.fineprint{font-size:10px;color:#81949e;line-height:1.5;margin:14px 0 0}
-
-#hud{position:fixed;inset:0;z-index:2;display:none;pointer-events:none}
-
-#top{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));left:9px;right:9px;display:flex;justify-content:space-between;gap:7px;align-items:flex-start}
-
-.stats{display:flex;gap:5px;flex-wrap:wrap;max-width:calc(100% - 84px)}
-
-.stat{padding:8px 10px;background:#0e1b24eF;border:1px solid var(--line);border-radius:12px;font-size:10px;color:#afc1ca}
-
-.stat b{display:block;font-size:13px;color:var(--gold);margin-top:3px}
-
-#map{width:76px;height:76px;border-radius:14px;background:#12232c;border:1px solid #ffffff45}
-
-#hint{position:absolute;top:100px;left:50%;transform:translateX(-50%);padding:8px 11px;border-radius:12px;background:#0e1b24eF;border:1px solid var(--line);font-size:11px;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
-
-#bottom{position:absolute;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
-
-#pad{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,41px);gap:4px;pointer-events:auto}
-
-#pad button{padding:0;background:#0e1b24eF;border:1px solid #ffffff20;font-size:18px;touch-action:none;box-shadow:none}
-
-.up{grid-column:2;grid-row:1}
-
-.left{grid-column:1;grid-row:2}
-
-.down{grid-column:2;grid-row:2}
-
-.right{grid-column:3;grid-row:2}
-
-#act{display:grid;gap:6px;width:112px;pointer-events:auto}
-
-#act button{font-size:11px;padding:11px 6px}
-
-#toast{display:none;position:fixed;z-index:9;top:22%;left:50%;transform:translateX(-50%);background:#10212a;border:1px solid #ffffff35;padding:11px 15px;border-radius:12px;max-width:90%;font-size:12px;text-align:center;box-shadow:0 10px 30px #0008}
-
-#modal{display:none;position:fixed;inset:0;z-index:6;background:#02090dbb;align-items:center;justify-content:center;padding:18px}
-
-.modal-card{width:min(430px,100%);padding:20px;border-radius:20px;background:#14232c;border:1px solid #ffffff24}
-
-.modal-card h2{margin:0 0 7px}
-
-.modal-card p{color:#b7c7cf;font-size:13px;line-height:1.5}
-
-.jobgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-
-.jobgrid button{text-align:left;font-size:12px;box-shadow:none}
-
-.jobgrid small{display:block;font-size:10px;color:#c2d0d5;margin-top:5px}
-
-@media(max-width:380px){
-
-.login-card{padding:17px}.hero{height:95px}.fields{grid-template-columns:1fr}.fineprint{margin-top:10px}
-
-#pad{grid-template-columns:repeat(3,39px);grid-template-rows:repeat(2,38px)}
-
-#act{width:100px}
-
-}
-
+.role.active{border:1px solid var(--gold);background:#40351e;color:#ffe7a4}
+.actions{display:grid;grid-template-columns:1.2fr 1fr;gap:9px;margin-top:15px}
+.primary{background:linear-gradient(100deg,#ffe69b,#f2bd4e);color:#14212b;font-size:17px;padding:17px}
+.small{font-size:12px}
+.fine{color:#8198a6;font-size:10px;line-height:1.5;margin:13px 0 0}
+#hud{display:none;position:fixed;inset:0;z-index:3;pointer-events:none}
+.top{position:absolute;top:calc(8px + env(safe-area-inset-top));left:8px;right:8px;display:flex;gap:7px;justify-content:space-between}
+.stats{display:flex;flex-wrap:wrap;gap:5px}
+.stat{padding:8px 10px;border:1px solid #ffffff20;border-radius:10px;background:#091923e8;font-size:9px;color:#b5c9d2}
+.stat b{display:block;color:var(--gold);font-size:12px;margin-top:3px}
+#map{width:64px;height:64px;border-radius:11px;background:#0a1820e8;border:1px solid #ffffff33}
+#hint{position:absolute;top:calc(82px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);max-width:90%;padding:8px 11px;border-radius:10px;background:#0a1820e8;font-size:11px;white-space:nowrap}
+#controls{position:absolute;bottom:calc(12px + env(safe-area-inset-bottom));left:10px;right:10px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+#pad{display:grid;grid-template-columns:repeat(3,43px);grid-template-rows:repeat(2,40px);gap:5px;pointer-events:auto}
+#pad button{padding:0;border:1px solid #ffffff28;background:#0b1d2be8;box-shadow:none;font-size:18px}
+.up{grid-column:2}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}
+#buttons{display:grid;grid-template-columns:repeat(2,minmax(68px,90px));gap:6px;pointer-events:auto}
+#buttons button{padding:11px 4px;font-size:10px;box-shadow:none}
+#notice{display:none;position:fixed;z-index:20;top:20%;left:50%;transform:translateX(-50%);padding:12px 15px;background:#0c1b27;border:1px solid #69f2d0;border-radius:12px;font-size:12px;max-width:90%;text-align:center}
+#modal{display:none;position:fixed;inset:0;z-index:15;align-items:center;justify-content:center;padding:18px;background:#000b}
+.modalcard{width:min(390px,100%);padding:20px;border:1px solid #ffffff25;border-radius:18px;background:#102330}
+.modalcard h2{margin-top:0}
+.jobs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.jobs button{font-size:12px;text-align:left;box-shadow:none}
+.jobs small{display:block;margin-top:5px;color:#b7cbd4}
+@media(max-width:390px){.card{padding:16px}.city-art{height:82px}.roles{gap:5px}.role{font-size:10px}#pad{grid-template-columns:repeat(3,38px);grid-template-rows:repeat(2,36px)}#buttons{grid-template-columns:repeat(2,70px)}}
 </style>
-
 </head>
-
 <body>
-
 <canvas id="game"></canvas>
-
-<div id="login">
-
- <div class="login-card">
-
-  <div class="brand"><div class="mark">TR</div><div><div class="kicker">AÇIK DÜNYA • YAŞAM RP</div><h1>Türkiye <span>Roleplay</span></h1></div></div>
-
-  <div class="hero"><div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div><div class="hero-label">YENİ BİR HAYAT SENİ BEKLİYOR</div></div>
-
-  <p class="desc">Şehre adım at, kendi hikâyeni yaz. Karakterini oluştur, mesleğini seç, aracını sür ve şehrin sokaklarını keşfet.</p>
-
-  <div class="fields">
-
-   <label class="field">KARAKTER ADI<input id="charName" maxlength="18" value="Deniz Yılmaz" autocomplete="nickname"></label>
-
-   <label class="field">BAŞLANGIÇ BÖLGESİ<select id="district"><option value="center">Şehir Merkezi</option><option value="industrial">Sanayi Bölgesi</option><option value="coast">Sahil Mahallesi</option></select></label>
-
-  </div>
-
-  <div class="role-title">KARAKTERİNİN YOLUNU SEÇ</div>
-
-  <div class="roles">
-
-   <button type="button" class="role active" data-role="Vatandaş"><strong>🧑</strong>Vatandaş</button>
-
-   <button type="button" class="role" data-role="Polis"><strong>🚔</strong>Polis</button>
-
-   <button type="button" class="role" data-role="Paramedik"><strong>🚑</strong>Paramedik</button>
-
-  </div>
-
-  <div class="start-row"><button type="button" class="gold" id="startBtn">ŞEHRE GİR&nbsp; →</button><button type="button" id="helpBtn">Nasıl oynanır?</button></div>
-
-  <p class="fineprint">Ön izleme sürümü • Mobil tarayıcıda çalışır. Bu sürüm tek oyunculudur; çevrim içi çok oyunculu sunucu henüz bağlı değildir.</p>
-
+<section id="login"><div class="card">
+ <div class="brand"><div class="logo">TR</div><div><div class="tag">AÇIK DÜNYA • YAŞAM RP</div><strong>TÜRKİYE ROLEPLAY</strong></div></div>
+ <h1>Şehir senin.<br><span>Hikâyen başlasın.</span></h1>
+ <p class="sub">Kendi karakterini oluştur, sokakları keşfet, araç sür ve görevlerden para kazan.</p>
+ <div class="city-art"><b>İZMİR KÖRFEZİ • GECE ŞEHRİ</b></div>
+ <div class="fields">
+  <label class="field">KARAKTER ADI<input id="playerName" maxlength="18" value="Enzo" autocomplete="off"></label>
+  <label class="field">BAŞLANGIÇ BÖLGESİ<select id="district"><option value="0">Konak merkezi</option><option value="1">Kordon sahili</option><option value="2">Sanayi bölgesi</option></select></label>
  </div>
-
-</div>
-
-<div id="hud">
-
- <div id="top"><div class="stats">
-
-  <div class="stat">OYUNCU<b id="hudName">Deniz</b></div>
-
-  <div class="stat">BAKİYE<b id="hudMoney">₺ 2.500</b></div>
-
-  <div class="stat">MESLEK<b id="hudJob">Vatandaş</b></div>
-
- </div><canvas id="map" width="120" height="120"></canvas></div>
-
+ <div class="label">ROLÜNÜ SEÇ</div>
+ <div class="roles">
+  <button class="role active" data-role="Sivil"><strong>♙</strong>Sivil</button>
+  <button class="role" data-role="Polis"><strong>✦</strong>Polis</button>
+  <button class="role" data-role="Sağlıkçı"><strong>✚</strong>Sağlıkçı</button>
+ </div>
+ <div class="actions">
+  <button id="startBtn" class="primary" type="button">ŞEHRE GİR ↗</button>
+  <button id="helpBtn" type="button">Nasıl oynanır?</button>
+ </div>
+ <p class="fine">Tek oyunculu tarayıcı prototipi. İlerlemen bu cihazda saklanabilir.</p>
+</div></section>
+<section id="hud">
+ <div class="top"><div class="stats">
+  <div class="stat">KARAKTER<b id="hudName">Enzo</b></div>
+  <div class="stat">ROL<b id="hudRole">Sivil</b></div>
+  <div class="stat">PARA<b id="money">₺2.500</b></div>
+  <div class="stat">DURUM<b id="state">Yürüyorsun</b></div>
+ </div><canvas id="map" width="128" height="128"></canvas></div>
  <div id="hint">Yön tuşlarıyla hareket et</div>
-
- <div id="bottom">
-
-  <div id="pad"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="down" data-dir="down">▼</button><button class="right" data-dir="right">▶</button></div>
-
-  <div id="act"><button id="carBtn">🚘 Araca bin</button><button id="jobsBtn">💼 Meslekler</button><button id="workBtn">💵 Görev yap</button></div>
-
+ <div id="controls">
+  <div id="pad">
+   <button class="up" data-key="up">▲</button>
+   <button class="left" data-key="left">◀</button>
+   <button class="down" data-key="down">▼</button>
+   <button class="right" data-key="right">▶</button>
+  </div>
+  <div id="buttons">
+   <button id="carBtn" class="primary">🚗 Araca bin</button>
+   <button id="jobsBtn">💼 İşler</button>
+   <button id="cameraBtn">🎥 Kamera</button>
+   <button id="saveBtn">💾 Kaydet</button>
+  </div>
  </div>
-
-</div>
-
-<div id="modal"><div class="modal-card"><h2>Meslek merkezi</h2><p>Bir meslek seç. Görev yaparak para kazanabilirsin.</p><div class="jobgrid">
-
-<button data-job="Kurye" data-pay="450">🛵 Kurye<small>₺450 / görev</small></button>
-
-<button data-job="Taksici" data-pay="600">🚕 Taksici<small>₺600 / görev</small></button>
-
-<button data-job="Kamyoncu" data-pay="850">🚚 Kamyoncu<small>₺850 / görev</small></button>
-
-<button data-job="Esnaf" data-pay="500">🏪 Esnaf<small>₺500 / görev</small></button>
-
-<button data-job="Polis" data-pay="700">🚔 Polis<small>₺700 / görev</small></button>
-
-<button data-job="Paramedik" data-pay="700">🚑 Paramedik<small>₺700 / görev</small></button>
-
-</div><button id="closeModal" style="width:100%;margin-top:12px">Kapat</button></div></div>
-
-<div id="toast"></div>
-
-<script>(function(){
-
-"use strict";
-
+</section>
+<div id="notice"></div>
+<div id="modal"><div class="modalcard">
+ <h2 id="modalTitle">Şehir işleri</h2><p id="modalText">Görev seçerek para kazan.</p>
+ <div id="jobs" class="jobs"></div><button id="closeModal" style="width:100%;margin-top:12px">Kapat</button>
+</div></div>
+<script>
+(function(){
+'use strict';
 const $=id=>document.getElementById(id);
+const canvas=$('game'),ctx=canvas.getContext('2d');
+let role='Sivil',started=false,money=2500,cam=0,driving=false;
+let car={x:4,y:2,a:0},player={x:0,y:0,a:0};
+let keys={up:false,down:false,left:false,right:false},last=0;
+const saveKey='trp-v14-save';
 
-const canvas=$("game"),ctx=canvas.getContext("2d"),map=$("map"),mctx=map.getContext("2d");
-
-let W=innerWidth,H=innerHeight,dpr=1,playing=false,role="Vatandaş",job="Vatandaş",name="Deniz Yılmaz",money=2500,carMode=false,toastTimer=0;
-
-const world={w:2400,h:2000,block:220,road:62};
-
-const player={x:1200,y:1000,angle:0},car={x:1280,y:1020,angle:0,speed:0};
-
-const keys={up:false,down:false,left:false,right:false};
-
-let buildings=[],trees=[],landmarks=[];
-
-function resize(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);canvas.style.width=W+"px";canvas.style.height=H+"px";ctx.setTransform(dpr,0,0,dpr,0,0);generate();draw()}
-
-function rnd(n){const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)}
-
-function generate(){
-
- buildings=[];trees=[];
-
- for(let bx=0;bx<world.w;bx+=world.block)for(let by=0;by<world.h;by+=world.block){
-
-  if(Math.abs(bx+110-world.w/2)<180&&Math.abs(by+110-world.h/2)<180)continue;
-
-  const seed=bx*3+by*7;
-
-  for(let i=0;i<2+Math.floor(rnd(seed)*3);i++){
-
-   const bw=42+rnd(seed+i+1)*65,bh=44+rnd(seed+i+2)*65;
-
-   const x=bx+world.road+8+rnd(seed+i+3)*(world.block-world.road-bw-16);
-
-   const y=by+world.road+8+rnd(seed+i+4)*(world.block-world.road-bh-16);
-
-   buildings.push({x,y,w:bw,h:bh,c:["#c9c2b2","#aebbb8","#b4bac6","#b6aa99"][Math.floor(rnd(seed+i+5)*4)]});
-
-  }
-
-  for(let t=0;t<2;t++)trees.push({x:bx+15+rnd(seed+t+15)*(world.block-30),y:by+15+rnd(seed+t+25)*(world.block-30),r:5+rnd(seed+t+35)*4});
-
- }
-
- landmarks=[
-
- {x:1200,y:1000,label:"MEYDAN",color:"#e8c76d",symbol:"★"},
-
- {x:800,y:760,label:"EMNİYET",color:"#4384c2",symbol:"✦"},
-
- {x:1640,y:800,label:"HASTANE",color:"#e7e9e4",symbol:"✚"},
-
- {x:1740,y:1390,label:"SANAYİ",color:"#9ca8aa",symbol:"⚙"},
-
- {x:760,y:1430,label:"SAHİL PARKI",color:"#4caa75",symbol:"🌳"},
-
- {x:1500,y:540,label:"BANKA",color:"#e2b64f",symbol:"₺"}
-
- ];
-
+function say(t){
+ const n=$('notice');n.textContent=t;n.style.display='block';
+ clearTimeout(say.timer);say.timer=setTimeout(()=>n.style.display='none',2200);
 }
-
-function camera(){const p=carMode?car:player;return{x:Math.max(0,Math.min(world.w-W,p.x-W/2)),y:Math.max(0,Math.min(world.h-H,p.y-H/2))}}
-
-function box(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
-
-function drawBuilding(b,c){const x=b.x-c.x,y=b.y-c.y;if(x+b.w<0||y+b.h<0||x>W||y>H)return;ctx.fillStyle="#27343a40";box(x+4,y+5,b.w,b.h,5);ctx.fillStyle=b.c;box(x,y,b.w,b.h,4);ctx.fillStyle="#f2d79b";for(let i=0;i<Math.max(2,b.w/20);i++)for(let j=0;j<Math.max(2,b.h/20);j++)ctx.fillRect(x+7+i*17,y+7+j*16,5,5);ctx.strokeStyle="#ffffff3a";ctx.strokeRect(x+.5,y+.5,b.w-1,b.h-1)}
-
-function drawCar(v,c,isPlayer){ctx.save();ctx.translate(v.x-c.x,v.y-c.y);ctx.rotate(v.angle);ctx.fillStyle="#0005";box(-16,-8,36,23,6);ctx.fillStyle=isPlayer?"#d94c45":"#e1b84d";box(-18,-11,36,22,5);ctx.fillStyle="#203440";box(-9,-8,17,16,3);ctx.fillStyle="#b6dce5";ctx.fillRect(-7,-7,12,5);ctx.fillRect(-7,1,12,5);ctx.fillStyle="#ffefb0";ctx.fillRect(14,-7,3,4);ctx.fillRect(14,3,3,4);ctx.restore()}
-
-function drawPlayer(p,c){ctx.save();ctx.translate(p.x-c.x,p.y-c.y);ctx.fillStyle="#0004";ctx.beginPath();ctx.ellipse(1,5,10,7,0,0,7);ctx.fill();ctx.fillStyle=role==="Polis"?"#315c91":role==="Paramedik"?"#e8e8e1":"#288d72";ctx.beginPath();ctx.arc(0,0,9,0,7);ctx.fill();ctx.fillStyle="#f0c59d";ctx.beginPath();ctx.arc(0,-4,5,0,7);ctx.fill();ctx.restore()}
-
-function drawLandmark(l,c){const x=l.x-c.x,y=l.y-c.y;ctx.fillStyle=l.color;box(x-22,y-20,44,40,8);ctx.fillStyle="#172630";ctx.textAlign="center";ctx.font="bold 17px system-ui";ctx.fillText(l.symbol,x,y+6);ctx.fillStyle="#fff";ctx.font="bold 9px system-ui";ctx.fillText(l.label,x,y+31)}
-
-function drawMap(){mctx.clearRect(0,0,120,120);mctx.fillStyle="#23343d";mctx.fillRect(0,0,120,120);mctx.strokeStyle="#71828a";mctx.lineWidth=2;for(let x=0;x<120;x+=world.block/world.w*120){mctx.beginPath();mctx.moveTo(x,0);mctx.lineTo(x,120);mctx.stroke()}for(let y=0;y<120;y+=world.block/world.h*120){mctx.beginPath();mctx.moveTo(0,y);mctx.lineTo(120,y);mctx.stroke()}mctx.fillStyle="#f3c969";for(const l of landmarks){mctx.beginPath();mctx.arc(l.x/world.w*120,l.y/world.h*120,2.5,0,7);mctx.fill()}const p=carMode?car:player;mctx.fillStyle="#78e4c0";mctx.beginPath();mctx.arc(p.x/world.w*120,p.y/world.h*120,4,0,7);mctx.fill()}
-
-function draw(){
-
- if(!W||!H)return;ctx.clearRect(0,0,W,H);const c=camera();ctx.fillStyle="#8ba58a";ctx.fillRect(0,0,W,H);
-
- for(let x=0;x<world.w;x+=world.block)for(let y=0;y<world.h;y+=world.block){const sx=x-c.x,sy=y-c.y;if(sx>W||sy>H||sx+world.block<0||sy+world.block<0)continue;ctx.fillStyle="#8da888";ctx.fillRect(sx,sy,world.block,world.block);ctx.fillStyle="#46525a";ctx.fillRect(sx,sy,world.road,world.block);ctx.fillRect(sx,sy,world.block,world.road);ctx.fillStyle="#d5c27d";ctx.fillRect(sx+world.road/2-1,sy+world.road+7,2,world.block-world.road-14);ctx.fillRect(sx+world.road+7,sy+world.road/2-1,world.block-world.road-14,2)}
-
- for(const t of trees){const x=t.x-c.x,y=t.y-c.y;if(x<-20||y<-20||x>W+20||y>H+20)continue;ctx.fillStyle="#397c4e";ctx.beginPath();ctx.arc(x,y,t.r,0,7);ctx.fill()}
-
- for(const b of buildings)drawBuilding(b,c);for(const l of landmarks)drawLandmark(l,c);
-
- if(carMode)drawCar(car,c,true);else drawPlayer(player,c);drawMap();
-
+function setRole(r){
+ role=r;
+ document.querySelectorAll('[data-role]').forEach(b=>b.classList.toggle('active',b.dataset.role===r));
 }
+document.querySelectorAll('[data-role]').forEach(b=>b.addEventListener('click',()=>setRole(b.dataset.role)));
 
-function toast(msg){$("toast").textContent=msg;$("toast").style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").style.display="none",2300)}
-
-function updateHUD(){$("hudName").textContent=name;$("hudMoney").textContent="₺ "+money.toLocaleString("tr-TR");$("hudJob").textContent=job;$("carBtn").textContent=carMode?"🚶 Araçtan in":"🚘 Araca bin";$("hint").textContent=carMode?"Sürüş: ▲ gaz • ◀ ▶ yön":"Yürümek için yön tuşlarını kullan"}
+function resize(){
+ const d=Math.min(window.devicePixelRatio||1,2);
+ canvas.width=Math.floor(innerWidth*d);canvas.height=Math.floor(innerHeight*d);
+ canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';
+ ctx.setTransform(d,0,0,d,0,0);
+}
+window.addEventListener('resize',resize);resize();
 
 function startGame(){
-
- name=$("charName").value.trim()||"Oyuncu";job=role;
-
- const district=$("district").value;
-
- if(district==="industrial"){player.x=1740;player.y=1390}else if(district==="coast"){player.x=760;player.y=1430}else{player.x=1200;player.y=1000}
-
- car.x=player.x+36;car.y=player.y+20;car.angle=0;car.speed=0;carMode=false;
-
- $("login").style.display="none";$("hud").style.display="block";playing=true;updateHUD();draw();toast("Hoş geldin "+name+"! Şehir seni bekliyor.");
-
- if(!window.__trrpLoop){window.__trrpLoop=true;requestAnimationFrame(loop)}
-
+ if(started)return;
+ started=true;
+ const nm=$('playerName').value.trim()||'Enzo';
+ $('hudName').textContent=nm;$('hudRole').textContent=role;
+ const d=+$('district').value;
+ player.x=d===1?3:d===2?-4:0;player.y=d===1?3:d===2?4:0;
+ car.x=player.x+4;car.y=player.y+2;
+ $('login').style.display='none';$('hud').style.display='block';
+ try{
+  const s=JSON.parse(localStorage.getItem(saveKey)||'null');
+  if(s){
+   money=s.money||money;player.x=s.x??player.x;player.y=s.y??player.y;
+   car.x=s.cx??car.x;car.y=s.cy??car.y;
+   $('money').textContent='₺'+money.toLocaleString('tr-TR');
+  }
+ }catch(e){}
+ last=performance.now();
+ requestAnimationFrame(loop);
 }
+$('startBtn').addEventListener('click',startGame);
+$('startBtn').addEventListener('pointerup',e=>{e.preventDefault();startGame()});
 
-function loop(ts){if(!playing)return;const dt=Math.min((ts-(window.__trrpLast||ts))/1000,.04);window.__trrpLast=ts;if(carMode){const accel=(keys.up?1:0)-(keys.down?1:0);car.speed=Math.max(-90,Math.min(260,car.speed+accel*220*dt));car.speed*=Math.pow(.965,dt*60);const turn=(keys.right?1:0)-(keys.left?1:0);if(Math.abs(car.speed)>2)car.angle+=turn*2*dt*Math.sign(car.speed);car.x=Math.max(8,Math.min(world.w-8,car.x+Math.cos(car.angle)*car.speed*dt));car.y=Math.max(8,Math.min(world.h-8,car.y+Math.sin(car.angle)*car.speed*dt))}else{let dx=(keys.right?1:0)-(keys.left?1:0),dy=(keys.down?1:0)-(keys.up?1:0);const mag=Math.hypot(dx,dy)||1;player.x=Math.max(8,Math.min(world.w-8,player.x+dx/mag*165*dt));player.y=Math.max(8,Math.min(world.h-8,player.y+dy/mag*165*dt));if(dx||dy)player.angle=Math.atan2(dy,dx)}draw();requestAnimationFrame(loop)}
+function modal(title,text){
+ $('modalTitle').textContent=title;$('modalText').textContent=text;
+ $('jobs').innerHTML='';$('modal').style.display='flex';
+}
+$('helpBtn').addEventListener('click',()=>modal('Nasıl oynanır','Yön tuşlarıyla hareket et. Araca yaklaşınca araca bin. İşler menüsünden görev ödüllerini al.'));
+$('closeModal').onclick=()=>$('modal').style.display='none';
 
-document.querySelectorAll("[data-role]").forEach(b=>b.addEventListener("click",()=>{role=b.dataset.role;document.querySelectorAll("[data-role]").forEach(x=>x.classList.toggle("active",x===b))}));
+$('jobsBtn').onclick=()=>{
+ modal('Şehir işleri','Bir görev seç ve ödülünü kazan.');
+ [['📦 Kurye',650],['🚕 Taksi',800],['🧹 Belediye',450],['🔧 Tamirhane',700]].forEach(([name,reward])=>{
+  const b=document.createElement('button');
+  b.innerHTML=name+'<small>Ödül: ₺'+reward+'</small>';
+  b.onclick=()=>{
+   money+=reward;$('money').textContent='₺'+money.toLocaleString('tr-TR');
+   $('modal').style.display='none';say(name+' görevi tamamlandı! +₺'+reward);
+  };
+  $('jobs').appendChild(b);
+ });
+};
 
-$("startBtn").addEventListener("click",startGame);
+$('carBtn').onclick=()=>{
+ if(!started)return;
+ if(!driving&&Math.hypot(player.x-car.x,player.y-car.y)>7){say('Önce araca yaklaş.');return}
+ driving=!driving;
+ if(driving){player.x=car.x;player.y=car.y;say('Araca bindin. Yön tuşlarıyla sür.')}
+ else{player.x=car.x+2;player.y=car.y;say('Araçtan indin.')}
+ $('state').textContent=driving?'Araçtasın':'Yürüyorsun';
+ $('carBtn').textContent=driving?'🚶 Araçtan in':'🚗 Araca bin';
+};
+$('cameraBtn').onclick=()=>{cam=(cam+1)%3;say(['Takip kamerası','Geniş görünüm','Yakın görünüm'][cam])};
+$('saveBtn').onclick=()=>{
+ try{
+  localStorage.setItem(saveKey,JSON.stringify({money,x:player.x,y:player.y,cx:car.x,cy:car.y}));
+  say('Oyun bu cihazda kaydedildi.');
+ }catch(e){say('Tarayıcı kayda izin vermedi.')}
+};
 
-$("helpBtn").addEventListener("click",()=>toast("Yön tuşlarıyla yürü. Kırmızı araca yaklaş ve bin. Meslekler menüsünden iş seç."));
+function setKey(k,v){keys[k]=v}
+document.querySelectorAll('[data-key]').forEach(b=>{
+ const k=b.dataset.key;
+ b.addEventListener('pointerdown',e=>{
+  e.preventDefault();setKey(k,true);
+  try{b.setPointerCapture(e.pointerId)}catch(_){}
+ });
+ ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>{
+  b.addEventListener(ev,e=>{e.preventDefault();setKey(k,false)});
+ });
+});
+window.addEventListener('keydown',e=>{
+ const m={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};
+ if(m[e.key])keys[m[e.key]]=true;
+});
+window.addEventListener('keyup',e=>{
+ const m={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};
+ if(m[e.key])keys[m[e.key]]=false;
+});
+window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));
 
-document.querySelectorAll("[data-dir]").forEach(b=>{const k=b.dataset.dir;const down=e=>{e.preventDefault();keys[k]=true;if(b.setPointerCapture)b.setPointerCapture(e.pointerId)};const up=e=>{e.preventDefault();keys[k]=false};b.addEventListener("pointerdown",down);b.addEventListener("pointerup",up);b.addEventListener("pointercancel",up);b.addEventListener("lostpointercapture",()=>keys[k]=false)});
+function draw(){
+ const w=innerWidth,h=innerHeight;
+ ctx.clearRect(0,0,w,h);ctx.fillStyle='#172b31';ctx.fillRect(0,0,w,h);
+ const scale=cam===1?19:cam===2?38:27;
+ const focus=driving?car:player;
+ const ox=w/2-focus.x*scale,oy=h/2-focus.y*scale;
 
-window.addEventListener("keydown",e=>{const map={ArrowUp:"up",w:"up",ArrowDown:"down",s:"down",ArrowLeft:"left",a:"left",ArrowRight:"right",d:"right"};if(map[e.key]){keys[map[e.key]]=true;e.preventDefault()}});
-
-window.addEventListener("keyup",e=>{const map={ArrowUp:"up",w:"up",ArrowDown:"down",s:"down",ArrowLeft:"left",a:"left",ArrowRight:"right",d:"right"};if(map[e.key])keys[map[e.key]]=false});
-
-window.addEventListener("blur",()=>Object.keys(keys).forEach(k=>keys[k]=false));
-
-$("carBtn").addEventListener("click",()=>{if(!carMode&&Math.hypot(player.x-car.x,player.y-car.y)>100){toast("Araca binmek için kırmızı araca yaklaş.");return}if(carMode){carMode=false;player.x=car.x+32;player.y=car.y+15;car.speed=0}else{carMode=true;car.speed=0}updateHUD();draw()});
-
-$("jobsBtn").addEventListener("click",()=>$("modal").style.display="flex");
-
-$("closeModal").addEventListener("click",()=>$("modal").style.display="none");
-
-document.querySelectorAll("[data-job]").forEach(b=>b.addEventListener("click",()=>{job=b.dataset.job;money+=Number(b.dataset.pay);$("modal").style.display="none";updateHUD();toast(job+" işi seçildi, başlangıç ödemesi alındı.")}));
-
-$("workBtn").addEventListener("click",()=>{const pay=job==="Kamyoncu"?850:job==="Taksici"?600:job==="Esnaf"?500:job==="Polis"||job==="Paramedik"?700:450;money+=pay;updateHUD();toast("Görev tamamlandı! ₺"+pay+" kazandın.")});
-
-resize();
-
+ for(let gx=-10;gx<=10;gx++)for(let gy=-10;gy<=10;gy++){
+  const x=ox+gx*scale*2,y=oy+gy*scale*2;
+  ctx.fillStyle=(gx+gy)%3===0?'#354b4d':'#294044';
+  ctx.fillRect(x-scale*.65,y-scale*.65,scale*1.3,scale*1.3);
+  ctx.fillStyle='#3b454a';
+  ctx.fillRect(x-scale*.15,y-scale*1.1,scale*.3,scale*2.2);
+  ctx.fillRect(x-scale*1.1,y-scale*.15,scale*2.2,scale*.3);
+  ctx.strokeStyle='#d8c98b';ctx.setLineDash([7,7]);ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(x,y-scale*1.1);ctx.lineTo(x,y+scale*1.1);
+  ctx.moveTo(x-scale*1.1,y);ctx.lineTo(x+scale*1.1,y);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#d3b99a';ctx.fillRect(x-scale*.55,y-scale*.55,scale*1.1,scale*1.1);
+  ctx.fillStyle='#5d7372';ctx.fillRect(x-scale*.48,y-scale*.48,scale*.96,scale*.96);
+  for(let i=0;i<4;i++){
+   ctx.fillStyle='#b9cbd0';
+   ctx.fillRect(x-scale*.38+i*scale*.23,y-scale*.32,scale*.09,scale*.12);
+  }
+ }
+ for(let i=0;i<8;i++){
+  const x=(i-4)*scale*2+ox,y=oy+scale*1.5;
+  ctx.fillStyle='#ffd87a';ctx.beginPath();ctx.arc(x,y,scale*.09,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#ffd87a22';ctx.beginPath();ctx.arc(x,y,scale*.45,0,Math.PI*2);ctx.fill();
+ }
+ function carDraw(x,y,color,angle){
+  ctx.save();ctx.translate(ox+x*scale,oy+y*scale);ctx.rotate(angle);
+  ctx.fillStyle='#111820';ctx.fillRect(-scale*.48,-scale*.8,scale*.96,scale*1.6);
+  ctx.fillStyle=color;ctx.fillRect(-scale*.4,-scale*.72,scale*.8,scale*1.4);
+  ctx.fillStyle='#9bd6df';ctx.fillRect(-scale*.3,-scale*.35,scale*.6,scale*.42);
+  ctx.fillStyle='#ffecb0';ctx.fillRect(-scale*.34,-scale*.72,scale*.18,scale*.08);
+  ctx.fillRect(scale*.16,-scale*.72,scale*.18,scale*.08);ctx.restore();
+ }
+ carDraw(car.x,car.y,'#d94c48',car.a);
+ if(!driving){
+  ctx.save();ctx.translate(ox+player.x*scale,oy+player.y*scale);ctx.rotate(player.a);
+  ctx.fillStyle='#17232c';ctx.fillRect(-scale*.2,-scale*.24,scale*.4,scale*.55);
+  ctx.fillStyle=role==='Polis'?'#5684b9':role==='Sağlıkçı'?'#f0f0e9':'#54c7a0';
+  ctx.fillRect(-scale*.18,-scale*.22,scale*.36,scale*.38);
+  ctx.fillStyle='#e5b28c';ctx.beginPath();ctx.arc(0,-scale*.32,scale*.16,0,Math.PI*2);ctx.fill();ctx.restore();
+ }
+ const mc=$('map').getContext('2d');
+ mc.fillStyle='#1b353d';mc.fillRect(0,0,128,128);mc.strokeStyle='#879a8d';mc.lineWidth=7;
+ for(let p=16;p<128;p+=32){mc.beginPath();mc.moveTo(p,0);mc.lineTo(p,128);mc.moveTo(0,p);mc.lineTo(128,p);mc.stroke()}
+ mc.fillStyle='#ffd778';mc.beginPath();
+ mc.arc(64+(driving?car.x:player.x)*2,64+(driving?car.y:player.y)*2,4,0,Math.PI*2);mc.fill();
+}
+function loop(t){
+ if(!started)return;
+ const dt=Math.min((t-last)/1000,.04);last=t;
+ const obj=driving?car:player;
+ let dx=(keys.right?1:0)-(keys.left?1:0);
+ let dy=(keys.down?1:0)-(keys.up?1:0);
+ if(dx||dy){
+  const len=Math.hypot(dx,dy);dx/=len;dy/=len;
+  const speed=driving?8:5;
+  obj.x+=dx*speed*dt;obj.y+=dy*speed*dt;
+  obj.a=Math.atan2(dx,-dy);
+  if(driving){player.x=car.x;player.y=car.y;car.a=obj.a}
+ }
+ draw();requestAnimationFrame(loop);
+}
 })();
-
 </script>
+</body>
+</html>
