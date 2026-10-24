@@ -1,36 +1,34 @@
-DOCTYPE html>
+<!doctype html>
 
 <html lang="tr">
 
 <head>
 
-<meta charset="UTF-8">
+<meta charset="utf-8">
 
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>Mini Şehir 3D</title>
+<title>Türkiye Roleplay</title>
 
 <style>
 
 *{box-sizing:border-box}
 
-body{margin:0;background:#8dc5dd;font-family:Arial;color:white;overflow:hidden}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial;background:#87c5dd}
 
-canvas{display:block;width:100vw;height:100dvh}
+canvas{display:block;width:100%;height:100%}
 
-#top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:6px}
+.panel{position:absolute;background:#172536ee;color:white;padding:10px;border-radius:12px;line-height:1.6}
 
-#panel{position:absolute;right:10px;top:55px;display:grid;gap:7px}
+#hud{top:10px;left:10px}
 
-button{background:#172536eF;color:white;border:1px solid #ffffff55;border-radius:10px;padding:11px 9px;font-weight:bold}
+#buttons{position:absolute;bottom:12px;right:10px;display:grid;grid-template-columns:1fr 1fr;gap:7px;width:48%}
 
-button.on{background:#087c5b}
+button{background:#172536;color:white;border:0;border-radius:12px;padding:15px 8px;font-weight:bold;font-size:14px}
 
-#joy{position:absolute;bottom:25px;left:22px;width:110px;height:110px;border-radius:50%;background:#17253688;border:2px solid #ffffff88;touch-action:none}
+#move{position:absolute;bottom:20px;left:10px;display:grid;grid-template-columns:52px 52px;gap:6px}
 
-#dot{position:absolute;left:33px;top:33px;width:40px;height:40px;border-radius:50%;background:#e74c65}
-
-small{background:#172536dd;padding:9px;border-radius:9px}
+#move button{height:50px;font-size:22px;padding:0}
 
 </style>
 
@@ -40,14 +38,80 @@ small{background:#172536dd;padding:9px;border-radius:9px}
 
 <canvas id="c"></canvas>
 
-<div id="top"><small>🏙️ MINI ŞEHİR</small><small id="stats">Can: 100</small></div>
+<div id="hud" class="panel">🇹🇷 TÜRKİYE ROLEPLAY<br>💰 Para: <span id="money">500</span> ₺<br>🚶 Durum: <span id="state">Yürüyorsun</span><br>🚗 Hız: <span id="speed">0</span></div>
 
-<div id="panel">
+<div id="move">
 
-<button id="esp">👁 ESP: KAPALI</button>
+<button id="up">⬆️</button><button id="down">⬇️</button>
 
-<button id="god">🛡 GOD: KAPALI</button>
+<button id="left">⬅️</button><button id="right">➡️</button>
 
-<button id="aim">🎯 HEDEF: KAPALI</button>
+</div>
 
-<button id="heal">❤️ CAN DOLDUR</-
+<div id="buttons">
+
+<button id="enter">ARABAYA BİN 🚗</button><button id="gas">GAZ 🚀</button>
+
+<button id="exit">ARABADAN İN</button><button id="brake">FREN 🛑</button>
+
+<button id="job">KURYE GÖREVİ 📦</button><button id="reset">SIFIRLA ↻</button>
+
+</div>
+
+<script>
+
+const c=document.getElementById('c'),g=c.getContext('2d');
+
+let W,H,d=1,walkingX=0,walkingY=0,inCar=false,speed=0,move=0,money=500,job=false,dist=0,keys={};
+
+function resize(){d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;g.setTransform(d,0,0,d,0,0)}
+
+addEventListener('resize',resize);resize();
+
+function box(x,y,w,h,col){g.fillStyle=col;g.fillRect(x,y,w,h)}
+
+function car(x,y,s){box(x-s*.6,y-s*.4,s*1.2,s*1.8,'#171d24');box(x-s*.48,y-s*.5,s*.96,s*1.7,'#d83e36');box(x-s*.31,y-s*.35,s*.62,s*.35,'#b8e6f3');box(x-s*.31,y+s*.12,s*.62,s*.28,'#b8e6f3');box(x-s*.4,y-s*.47,s*.18,s*.07,'#fff');box(x+s*.22,y-s*.47,s*.18,s*.07,'#fff')}
+
+function person(x,y,s){g.fillStyle='#edbd97';g.beginPath();g.arc(x,y-s*.55,s*.22,0,Math.PI*2);g.fill();box(x-s*.2,y-s*.3,s*.4,s*.48,'#2674d8');box(x-s*.18,y+s*.15,s*.14,s*.4,'#273444');box(x+s*.04,y+s*.15,s*.14,s*.4,'#273444');box(x-s*.31,y-s*.25,s*.12,s*.35,'#edbd97');box(x+s*.19,y-s*.25,s*.12,s*.35,'#edbd97');g.fillStyle='#382a20';g.beginPath();g.arc(x,y-s*.62,s*.23,Math.PI,Math.PI*2);g.fill()}
+
+function hold(id,key){let b=document.getElementById(id);b.onpointerdown=e=>{e.preventDefault();keys[key]=true;b.setPointerCapture(e.pointerId)};['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>keys[key]=false))}
+
+['up','down','left','right','gas','brake'].forEach(k=>hold(k,k));
+
+function draw(){
+
+g.clearRect(0,0,W,H);
+
+let sky=g.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#75bee8');sky.addColorStop(.5,'#d9edf2');sky.addColorStop(.51,'#86b873');sky.addColorStop(1,'#659657');g.fillStyle=sky;g.fillRect(0,0,W,H);
+
+box(W*.30,H*.38,W*.40,H*.62,'#555b62');box(W*.275,H*.38,W*.025,H*.62,'#bdb9aa');box(W*.70,H*.38,W*.025,H*.62,'#bdb9aa');
+
+for(let i=0;i<9;i++){let y=H*.40+i*H*.075;box(W*.495,y,W*.01,15+i*2,'#fff')}
+
+for(let side of [-1,1])for(let i=0;i<7;i++){let xx=W/2+side*(W*.25+i*W*.035),yy=H*.43+i*H*.055,bw=18+i*5,bh=35+i*13;box(xx-bw/2,yy-bh,bw,bh,['#d2bca0','#d4a18e','#aebdca'][i%3]);for(let j=0;j<2;j++)box(xx-bw*.25+j*bw*.4,yy-bh*.75,bw*.15,bh*.12,'#344b60')}
+
+car(W*.50,H*.72,Math.min(65,W*.12));
+
+if(inCar){car(W*.50,H*.83,Math.min(75,W*.13));if(keys.gas){speed=Math.min(120,speed+0.3);move+=speed*.05;if(job)dist+=speed*.05}else speed=Math.max(0,speed-(keys.brake?.8:.1))}
+
+else{let v=2.5;if(keys.up)walkingY-=v;if(keys.down)walkingY+=v;if(keys.left)walkingX-=v;if(keys.right)walkingX+=v;person(W*.5+walkingX,H*.81+walkingY,30)}
+
+document.getElementById('speed').textContent=Math.round(speed)+' km/sa';
+
+requestAnimationFrame(draw)}
+
+draw();
+
+document.getElementById('enter').onclick=()=>{inCar=true;document.getElementById('state').textContent='Araba kullanıyorsun';alert('Arabaya bindin! GAZ tuşuna bas.')};
+
+document.getElementById('exit').onclick=()=>{inCar=false;speed=0;document.getElementById('state').textContent='Yürüyorsun'};
+
+document.getElementById('job').onclick=()=>{job=true;dist=0;alert('Kurye işi başladı! 300 metre sür.')};
+
+document.getElementById('reset').onclick=()=>{walkingX=0;walkingY=0;speed=0;inCar=false;job=false;document.getElementById('state').textContent='Yürüyorsun'};
+
+</script>
+
+</body>
+
+</html>
