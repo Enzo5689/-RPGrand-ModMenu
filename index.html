@@ -1,292 +1,277 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="tr">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#08121d">
-<title>Türkiye Roleplay V14</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>Dönerci Usta</title>
+
 <style>
-:root{--gold:#ffd778;--mint:#69f2d0;--panel:#0d1c2aef}
+
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#09131e;color:#f5f8fc;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
-button,input,select{font:inherit}
-button{cursor:pointer;border:0;border-radius:13px;padding:13px;background:#203749;color:#fff;font-weight:800;touch-action:manipulation}
-button:active{transform:scale(.98)}
-#game{position:fixed;inset:0;width:100%;height:100%;display:block}
-#login{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;overflow:auto;padding:18px;background:radial-gradient(ellipse at 80% 10%,#1b6170 0,#102938 35%,#070e17 78%)}
-.card{width:min(560px,100%);max-height:96dvh;overflow:auto;padding:clamp(18px,4vw,28px);border:1px solid #68d9df45;border-radius:25px;background:linear-gradient(145deg,#112433f5,#091620f7);box-shadow:0 20px 80px #0009}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#fff0ad,#e8ac3c);color:#14202a;font-weight:1000;font-size:20px}
-.tag{font-size:10px;letter-spacing:2px;color:var(--mint);font-weight:900}
-h1{font-size:clamp(30px,7vw,46px);line-height:1.02;letter-spacing:-1.5px;margin:7px 0}
-h1 span{color:var(--gold)}
-.sub{color:#b3c5d0;font-size:13px;line-height:1.6}
-.city-art{height:105px;border-radius:16px;margin:16px 0;overflow:hidden;position:relative;background:linear-gradient(#123c53 0 55%,#1d5360 56% 68%,#14252d 69%)}
-.city-art:before{content:"";position:absolute;inset:15px 0 15px;background:repeating-linear-gradient(90deg,#081923 0 18px,#183746 18px 34px,#091b26 34px 49px);clip-path:polygon(0 35%,7% 35%,7% 5%,14% 5%,14% 24%,24% 24%,24% 0,35% 0,35% 40%,46% 40%,46% 15%,59% 15%,59% 0,70% 0,70% 31%,81% 31%,81% 10%,91% 10%,91% 36%,100% 36%,100% 100%,0 100%)}
-.city-art:after{content:"";position:absolute;left:48%;bottom:-20px;width:30%;height:85px;background:#303c43;transform:perspective(70px) rotateX(8deg);border-top:3px dashed #f8d37a}
-.city-art b{position:absolute;left:12px;bottom:10px;font-size:9px;letter-spacing:2px;z-index:1;color:#bfe7ec}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.field{display:grid;gap:7px;color:#aec0ca;font-size:11px;font-weight:900;letter-spacing:.5px}
-input,select{width:100%;min-width:0;padding:13px;border:1px solid #294758;border-radius:12px;background:#08141e;color:#fff;font-size:14px}
-.label{margin:16px 0 9px;font-size:11px;letter-spacing:1.5px;color:#b9cbd5;font-weight:900}
-.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.role{padding:11px 4px;border:1px solid #294657;background:#102433;font-size:11px;box-shadow:none}
-.role strong{display:block;font-size:21px;margin-bottom:4px}
-.role.active{border:1px solid var(--gold);background:#40351e;color:#ffe7a4}
-.actions{display:grid;grid-template-columns:1.2fr 1fr;gap:9px;margin-top:15px}
-.primary{background:linear-gradient(100deg,#ffe69b,#f2bd4e);color:#14212b;font-size:17px;padding:17px}
-.small{font-size:12px}
-.fine{color:#8198a6;font-size:10px;line-height:1.5;margin:13px 0 0}
-#hud{display:none;position:fixed;inset:0;z-index:3;pointer-events:none}
-.top{position:absolute;top:calc(8px + env(safe-area-inset-top));left:8px;right:8px;display:flex;gap:7px;justify-content:space-between}
-.stats{display:flex;flex-wrap:wrap;gap:5px}
-.stat{padding:8px 10px;border:1px solid #ffffff20;border-radius:10px;background:#091923e8;font-size:9px;color:#b5c9d2}
-.stat b{display:block;color:var(--gold);font-size:12px;margin-top:3px}
-#map{width:64px;height:64px;border-radius:11px;background:#0a1820e8;border:1px solid #ffffff33}
-#hint{position:absolute;top:calc(82px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);max-width:90%;padding:8px 11px;border-radius:10px;background:#0a1820e8;font-size:11px;white-space:nowrap}
-#controls{position:absolute;bottom:calc(12px + env(safe-area-inset-bottom));left:10px;right:10px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
-#pad{display:grid;grid-template-columns:repeat(3,43px);grid-template-rows:repeat(2,40px);gap:5px;pointer-events:auto}
-#pad button{padding:0;border:1px solid #ffffff28;background:#0b1d2be8;box-shadow:none;font-size:18px}
-.up{grid-column:2}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}
-#buttons{display:grid;grid-template-columns:repeat(2,minmax(68px,90px));gap:6px;pointer-events:auto}
-#buttons button{padding:11px 4px;font-size:10px;box-shadow:none}
-#notice{display:none;position:fixed;z-index:20;top:20%;left:50%;transform:translateX(-50%);padding:12px 15px;background:#0c1b27;border:1px solid #69f2d0;border-radius:12px;font-size:12px;max-width:90%;text-align:center}
-#modal{display:none;position:fixed;inset:0;z-index:15;align-items:center;justify-content:center;padding:18px;background:#000b}
-.modalcard{width:min(390px,100%);padding:20px;border:1px solid #ffffff25;border-radius:18px;background:#102330}
-.modalcard h2{margin-top:0}
-.jobs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.jobs button{font-size:12px;text-align:left;box-shadow:none}
-.jobs small{display:block;margin-top:5px;color:#b7cbd4}
-@media(max-width:390px){.card{padding:16px}.city-art{height:82px}.roles{gap:5px}.role{font-size:10px}#pad{grid-template-columns:repeat(3,38px);grid-template-rows:repeat(2,36px)}#buttons{grid-template-columns:repeat(2,70px)}}
+
+body{margin:0;background:#201610;color:#fff3df;font-family:system-ui}
+
+header{background:#8c291c;padding:16px;text-align:center}
+
+h1{margin:0}
+
+.stats{display:flex;justify-content:space-around;background:#35241a;padding:12px;font-weight:bold}
+
+main{max-width:520px;margin:auto;padding:12px}
+
+.card{background:#3b291e;border:1px solid #6e4b31;border-radius:16px;padding:15px;margin-bottom:12px}
+
+.customer{text-align:center;font-size:55px}
+
+#order{text-align:center;font-size:19px;color:#ffd16b;font-weight:bold}
+
+#plate{min-height:130px;background:#f1d5a2;border:8px solid #fff0d0;border-radius:50%;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:5px;padding:20px;margin:12px auto;color:#35241a}
+
+.ingredients{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+button{border:0;border-radius:12px;padding:12px;background:#f1bd58;color:#321b0d;font-weight:800;font-size:14px;touch-action:manipulation}
+
+button:disabled{opacity:.4}
+
+.primary{width:100%;background:#65cf78;font-size:17px;margin-top:10px}
+
+.secondary{background:#d87842;color:white}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.shoprow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+
+.shoprow button{max-width:130px}
+
+#message{text-align:center;min-height:25px;color:#ffe18c;font-weight:bold}
+
 </style>
+
 </head>
+
 <body>
-<canvas id="game"></canvas>
-<section id="login"><div class="card">
- <div class="brand"><div class="logo">TR</div><div><div class="tag">AÇIK DÜNYA • YAŞAM RP</div><strong>TÜRKİYE ROLEPLAY</strong></div></div>
- <h1>Şehir senin.<br><span>Hikâyen başlasın.</span></h1>
- <p class="sub">Kendi karakterini oluştur, sokakları keşfet, araç sür ve görevlerden para kazan.</p>
- <div class="city-art"><b>İZMİR KÖRFEZİ • GECE ŞEHRİ</b></div>
- <div class="fields">
-  <label class="field">KARAKTER ADI<input id="playerName" maxlength="18" value="Enzo" autocomplete="off"></label>
-  <label class="field">BAŞLANGIÇ BÖLGESİ<select id="district"><option value="0">Konak merkezi</option><option value="1">Kordon sahili</option><option value="2">Sanayi bölgesi</option></select></label>
- </div>
- <div class="label">ROLÜNÜ SEÇ</div>
- <div class="roles">
-  <button class="role active" data-role="Sivil"><strong>♙</strong>Sivil</button>
-  <button class="role" data-role="Polis"><strong>✦</strong>Polis</button>
-  <button class="role" data-role="Sağlıkçı"><strong>✚</strong>Sağlıkçı</button>
- </div>
- <div class="actions">
-  <button id="startBtn" class="primary" type="button">ŞEHRE GİR ↗</button>
-  <button id="helpBtn" type="button">Nasıl oynanır?</button>
- </div>
- <p class="fine">Tek oyunculu tarayıcı prototipi. İlerlemen bu cihazda saklanabilir.</p>
-</div></section>
-<section id="hud">
- <div class="top"><div class="stats">
-  <div class="stat">KARAKTER<b id="hudName">Enzo</b></div>
-  <div class="stat">ROL<b id="hudRole">Sivil</b></div>
-  <div class="stat">PARA<b id="money">₺2.500</b></div>
-  <div class="stat">DURUM<b id="state">Yürüyorsun</b></div>
- </div><canvas id="map" width="128" height="128"></canvas></div>
- <div id="hint">Yön tuşlarıyla hareket et</div>
- <div id="controls">
-  <div id="pad">
-   <button class="up" data-key="up">▲</button>
-   <button class="left" data-key="left">◀</button>
-   <button class="down" data-key="down">▼</button>
-   <button class="right" data-key="right">▶</button>
-  </div>
-  <div id="buttons">
-   <button id="carBtn" class="primary">🚗 Araca bin</button>
-   <button id="jobsBtn">💼 İşler</button>
-   <button id="cameraBtn">🎥 Kamera</button>
-   <button id="saveBtn">💾 Kaydet</button>
-  </div>
- </div>
+
+<header><h1>🌯 DÖNERCİ USTA</h1><small>Mahallenin en iyi dönercisi!</small></header>
+
+<div class="stats">
+
+<div>💰 ₺<span id="money">150</span></div>
+
+<div>⭐ <span id="rep">0</span></div>
+
+<div>📦 <span id="served">0</span></div>
+
+</div>
+
+<main>
+
+<section class="card">
+
+<div class="customer" id="customer">🧔🏻</div>
+
+<div id="order">Sipariş hazırlanıyor...</div>
+
+<div id="patience"></div>
+
 </section>
-<div id="notice"></div>
-<div id="modal"><div class="modalcard">
- <h2 id="modalTitle">Şehir işleri</h2><p id="modalText">Görev seçerek para kazan.</p>
- <div id="jobs" class="jobs"></div><button id="closeModal" style="width:100%;margin-top:12px">Kapat</button>
-</div></div>
+
+<section class="card">
+
+<h2>👨‍🍳 Dönerini hazırla</h2>
+
+<div id="plate">🫓</div>
+
+<div class="ingredients">
+
+<button onclick="add('🥙','Lavaş')">🫓 Lavaş</button>
+
+<button onclick="add('🥩','Et')">🥩 Et</button>
+
+<button onclick="add('🍅','Domates')">🍅 Domates</button>
+
+<button onclick="add('🥬','Marul')">🥬 Marul</button>
+
+<button onclick="add('🧅','Soğan')">🧅 Soğan</button>
+
+<button onclick="add('🥒','Turşu')">🥒 Turşu</button>
+
+<button onclick="add('🌶️','Acı sos')">🌶️ Acı sos</button>
+
+<button onclick="add('🍟','Patates')">🍟 Patates</button>
+
+<button onclick="add('🥤','İçecek')">🥤 İçecek</button>
+
+</div>
+
+<div class="actions" style="margin-top:10px">
+
+<button class="secondary" onclick="undo()">↩️ Son malzemeyi sil</button>
+
+<button class="secondary" onclick="clearPlate()">🗑️ Baştan yap</button>
+
+</div>
+
+<button class="primary" onclick="serve()">🔔 Siparişi teslim et</button>
+
+<div id="message"></div>
+
+</section>
+
+<section class="card">
+
+<h2>🏪 Dükkânını geliştir</h2>
+
+<div class="shoprow"><div>🔥 Döner ocağı<br><small>Sipariş başına +₺5</small></div><button id="ovenBtn" onclick="buy('oven',200)">₺200 — Al</button></div>
+
+<div class="shoprow"><div>✨ Tabela<br><small>Sipariş başına +₺10</small></div><button id="signBtn" onclick="buy('sign',350)">₺350 — Al</button></div>
+
+<div class="shoprow"><div>👨‍🍳 Usta aşçı<br><small>Sipariş başına +₺15</small></div><button id="chefBtn" onclick="buy('chef',500)">₺500 — Al</button></div>
+
+</section>
+
+</main>
+
 <script>
-(function(){
-'use strict';
+
+const recipes=[
+
+{name:"Et döner",items:["Lavaş","Et","Domates","Soğan"],price:60},
+
+{name:"Acılı döner",items:["Lavaş","Et","Domates","Acı sos"],price:75},
+
+{name:"Bol malzemeli",items:["Lavaş","Et","Marul","Turşu","Patates"],price:90},
+
+{name:"Usta menüsü",items:["Lavaş","Et","Domates","Soğan","Turşu","İçecek"],price:110},
+
+{name:"Özel döner",items:["Lavaş","Et","Marul","Acı sos","Patates","İçecek"],price:125}
+
+];
+
+let money=150,rep=0,served=0,plate=[],recipe=null,busy=false;
+
+let upgrades={oven:false,sign:false,chef:false};
+
 const $=id=>document.getElementById(id);
-const canvas=$('game'),ctx=canvas.getContext('2d');
-let role='Sivil',started=false,money=2500,cam=0,driving=false;
-let car={x:4,y:2,a:0},player={x:0,y:0,a:0};
-let keys={up:false,down:false,left:false,right:false},last=0;
-const saveKey='trp-v14-save';
 
-function say(t){
- const n=$('notice');n.textContent=t;n.style.display='block';
- clearTimeout(say.timer);say.timer=setTimeout(()=>n.style.display='none',2200);
+function say(t){$("message").textContent=t}
+
+function update(){
+
+$("money").textContent=money;
+
+$("rep").textContent=rep;
+
+$("served").textContent=served;
+
+for(const k of Object.keys(upgrades)){
+
+const b=$(k+"Btn");
+
+b.textContent=upgrades[k]?"✅ Alındı":({oven:"₺200 — Al",sign:"₺350 — Al",chef:"₺500 — Al"}[k]);
+
+b.disabled=upgrades[k];
+
 }
-function setRole(r){
- role=r;
- document.querySelectorAll('[data-role]').forEach(b=>b.classList.toggle('active',b.dataset.role===r));
+
 }
-document.querySelectorAll('[data-role]').forEach(b=>b.addEventListener('click',()=>setRole(b.dataset.role)));
 
-function resize(){
- const d=Math.min(window.devicePixelRatio||1,2);
- canvas.width=Math.floor(innerWidth*d);canvas.height=Math.floor(innerHeight*d);
- canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';
- ctx.setTransform(d,0,0,d,0,0);
+function render(){
+
+$("plate").innerHTML=plate.length?plate.map(x=>'<span style="font-size:25px">'+x.emoji+'</span>').join(""):'🫓';
+
 }
-window.addEventListener('resize',resize);resize();
 
-function startGame(){
- if(started)return;
- started=true;
- const nm=$('playerName').value.trim()||'Enzo';
- $('hudName').textContent=nm;$('hudRole').textContent=role;
- const d=+$('district').value;
- player.x=d===1?3:d===2?-4:0;player.y=d===1?3:d===2?4:0;
- car.x=player.x+4;car.y=player.y+2;
- $('login').style.display='none';$('hud').style.display='block';
- try{
-  const s=JSON.parse(localStorage.getItem(saveKey)||'null');
-  if(s){
-   money=s.money||money;player.x=s.x??player.x;player.y=s.y??player.y;
-   car.x=s.cx??car.x;car.y=s.cy??car.y;
-   $('money').textContent='₺'+money.toLocaleString('tr-TR');
-  }
- }catch(e){}
- last=performance.now();
- requestAnimationFrame(loop);
+function newOrder(){
+
+recipe=recipes[Math.floor(Math.random()*recipes.length)];
+
+plate=[];busy=false;
+
+$("customer").textContent=["🧔🏻","👩🏻","👨🏽","👵🏻","🧑🏻"][Math.floor(Math.random()*5)];
+
+$("order").textContent="📋 "+recipe.name+" istiyorum!";
+
+$("patience").textContent="Sipariş fiyatı: ₺"+recipe.price;
+
+render();say("Siparişi hazırlamaya başla!");
+
 }
-$('startBtn').addEventListener('click',startGame);
-$('startBtn').addEventListener('pointerup',e=>{e.preventDefault();startGame()});
 
-function modal(title,text){
- $('modalTitle').textContent=title;$('modalText').textContent=text;
- $('jobs').innerHTML='';$('modal').style.display='flex';
+function add(emoji,name){
+
+if(busy||!recipe)return;
+
+if(plate.length>=8)return say("Döner çok doldu!");
+
+plate.push({emoji,name});render();say(name+" eklendi.");
+
 }
-$('helpBtn').addEventListener('click',()=>modal('Nasıl oynanır','Yön tuşlarıyla hareket et. Araca yaklaşınca araca bin. İşler menüsünden görev ödüllerini al.'));
-$('closeModal').onclick=()=>$('modal').style.display='none';
 
-$('jobsBtn').onclick=()=>{
- modal('Şehir işleri','Bir görev seç ve ödülünü kazan.');
- [['📦 Kurye',650],['🚕 Taksi',800],['🧹 Belediye',450],['🔧 Tamirhane',700]].forEach(([name,reward])=>{
-  const b=document.createElement('button');
-  b.innerHTML=name+'<small>Ödül: ₺'+reward+'</small>';
-  b.onclick=()=>{
-   money+=reward;$('money').textContent='₺'+money.toLocaleString('tr-TR');
-   $('modal').style.display='none';say(name+' görevi tamamlandı! +₺'+reward);
-  };
-  $('jobs').appendChild(b);
- });
-};
+function undo(){if(busy)return;plate.pop();render();say("Son malzeme silindi.")}
 
-$('carBtn').onclick=()=>{
- if(!started)return;
- if(!driving&&Math.hypot(player.x-car.x,player.y-car.y)>7){say('Önce araca yaklaş.');return}
- driving=!driving;
- if(driving){player.x=car.x;player.y=car.y;say('Araca bindin. Yön tuşlarıyla sür.')}
- else{player.x=car.x+2;player.y=car.y;say('Araçtan indin.')}
- $('state').textContent=driving?'Araçtasın':'Yürüyorsun';
- $('carBtn').textContent=driving?'🚶 Araçtan in':'🚗 Araca bin';
-};
-$('cameraBtn').onclick=()=>{cam=(cam+1)%3;say(['Takip kamerası','Geniş görünüm','Yakın görünüm'][cam])};
-$('saveBtn').onclick=()=>{
- try{
-  localStorage.setItem(saveKey,JSON.stringify({money,x:player.x,y:player.y,cx:car.x,cy:car.y}));
-  say('Oyun bu cihazda kaydedildi.');
- }catch(e){say('Tarayıcı kayda izin vermedi.')}
-};
+function clearPlate(){if(busy)return;plate=[];render();say("Baştan hazırla.")}
 
-function setKey(k,v){keys[k]=v}
-document.querySelectorAll('[data-key]').forEach(b=>{
- const k=b.dataset.key;
- b.addEventListener('pointerdown',e=>{
-  e.preventDefault();setKey(k,true);
-  try{b.setPointerCapture(e.pointerId)}catch(_){}
- });
- ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>{
-  b.addEventListener(ev,e=>{e.preventDefault();setKey(k,false)});
- });
-});
-window.addEventListener('keydown',e=>{
- const m={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};
- if(m[e.key])keys[m[e.key]]=true;
-});
-window.addEventListener('keyup',e=>{
- const m={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};
- if(m[e.key])keys[m[e.key]]=false;
-});
-window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));
+function serve(){
 
-function draw(){
- const w=innerWidth,h=innerHeight;
- ctx.clearRect(0,0,w,h);ctx.fillStyle='#172b31';ctx.fillRect(0,0,w,h);
- const scale=cam===1?19:cam===2?38:27;
- const focus=driving?car:player;
- const ox=w/2-focus.x*scale,oy=h/2-focus.y*scale;
+if(busy||!recipe)return;
 
- for(let gx=-10;gx<=10;gx++)for(let gy=-10;gy<=10;gy++){
-  const x=ox+gx*scale*2,y=oy+gy*scale*2;
-  ctx.fillStyle=(gx+gy)%3===0?'#354b4d':'#294044';
-  ctx.fillRect(x-scale*.65,y-scale*.65,scale*1.3,scale*1.3);
-  ctx.fillStyle='#3b454a';
-  ctx.fillRect(x-scale*.15,y-scale*1.1,scale*.3,scale*2.2);
-  ctx.fillRect(x-scale*1.1,y-scale*.15,scale*2.2,scale*.3);
-  ctx.strokeStyle='#d8c98b';ctx.setLineDash([7,7]);ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(x,y-scale*1.1);ctx.lineTo(x,y+scale*1.1);
-  ctx.moveTo(x-scale*1.1,y);ctx.lineTo(x+scale*1.1,y);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle='#d3b99a';ctx.fillRect(x-scale*.55,y-scale*.55,scale*1.1,scale*1.1);
-  ctx.fillStyle='#5d7372';ctx.fillRect(x-scale*.48,y-scale*.48,scale*.96,scale*.96);
-  for(let i=0;i<4;i++){
-   ctx.fillStyle='#b9cbd0';
-   ctx.fillRect(x-scale*.38+i*scale*.23,y-scale*.32,scale*.09,scale*.12);
-  }
- }
- for(let i=0;i<8;i++){
-  const x=(i-4)*scale*2+ox,y=oy+scale*1.5;
-  ctx.fillStyle='#ffd87a';ctx.beginPath();ctx.arc(x,y,scale*.09,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#ffd87a22';ctx.beginPath();ctx.arc(x,y,scale*.45,0,Math.PI*2);ctx.fill();
- }
- function carDraw(x,y,color,angle){
-  ctx.save();ctx.translate(ox+x*scale,oy+y*scale);ctx.rotate(angle);
-  ctx.fillStyle='#111820';ctx.fillRect(-scale*.48,-scale*.8,scale*.96,scale*1.6);
-  ctx.fillStyle=color;ctx.fillRect(-scale*.4,-scale*.72,scale*.8,scale*1.4);
-  ctx.fillStyle='#9bd6df';ctx.fillRect(-scale*.3,-scale*.35,scale*.6,scale*.42);
-  ctx.fillStyle='#ffecb0';ctx.fillRect(-scale*.34,-scale*.72,scale*.18,scale*.08);
-  ctx.fillRect(scale*.16,-scale*.72,scale*.18,scale*.08);ctx.restore();
- }
- carDraw(car.x,car.y,'#d94c48',car.a);
- if(!driving){
-  ctx.save();ctx.translate(ox+player.x*scale,oy+player.y*scale);ctx.rotate(player.a);
-  ctx.fillStyle='#17232c';ctx.fillRect(-scale*.2,-scale*.24,scale*.4,scale*.55);
-  ctx.fillStyle=role==='Polis'?'#5684b9':role==='Sağlıkçı'?'#f0f0e9':'#54c7a0';
-  ctx.fillRect(-scale*.18,-scale*.22,scale*.36,scale*.38);
-  ctx.fillStyle='#e5b28c';ctx.beginPath();ctx.arc(0,-scale*.32,scale*.16,0,Math.PI*2);ctx.fill();ctx.restore();
- }
- const mc=$('map').getContext('2d');
- mc.fillStyle='#1b353d';mc.fillRect(0,0,128,128);mc.strokeStyle='#879a8d';mc.lineWidth=7;
- for(let p=16;p<128;p+=32){mc.beginPath();mc.moveTo(p,0);mc.lineTo(p,128);mc.moveTo(0,p);mc.lineTo(128,p);mc.stroke()}
- mc.fillStyle='#ffd778';mc.beginPath();
- mc.arc(64+(driving?car.x:player.x)*2,64+(driving?car.y:player.y)*2,4,0,Math.PI*2);mc.fill();
+busy=true;
+
+const expected=[...recipe.items].sort();
+
+const actual=plate.map(x=>x.name).sort();
+
+const correct=expected.length===actual.length&&expected.every((v,i)=>v===actual[i]);
+
+if(correct){
+
+const bonus=(upgrades.oven?5:0)+(upgrades.sign?10:0)+(upgrades.chef?15:0);
+
+const earned=recipe.price+bonus;
+
+money+=earned;rep+=10;served++;
+
+$("patience").textContent="😋 Müşteri memnun!";
+
+say("Harika! +₺"+earned+" kazandın!");
+
+}else{
+
+money+=10;rep=Math.max(0,rep-2);
+
+$("patience").textContent="😕 Sipariş yanlış!";
+
+say("Yanlış malzeme. ₺10 teselli parası.");
+
 }
-function loop(t){
- if(!started)return;
- const dt=Math.min((t-last)/1000,.04);last=t;
- const obj=driving?car:player;
- let dx=(keys.right?1:0)-(keys.left?1:0);
- let dy=(keys.down?1:0)-(keys.up?1:0);
- if(dx||dy){
-  const len=Math.hypot(dx,dy);dx/=len;dy/=len;
-  const speed=driving?8:5;
-  obj.x+=dx*speed*dt;obj.y+=dy*speed*dt;
-  obj.a=Math.atan2(dx,-dy);
-  if(driving){player.x=car.x;player.y=car.y;car.a=obj.a}
- }
- draw();requestAnimationFrame(loop);
+
+update();
+
+$("order").textContent=correct?"Sipariş teslim edildi!":"Müşteri memnun kalmadı.";
+
+setTimeout(newOrder,1600);
+
 }
-})();
+
+function buy(key,cost){
+
+if(upgrades[key])return;
+
+if(money<cost)return say("Yeterli paran yok!");
+
+money-=cost;upgrades[key]=true;update();say("Dükkân geliştirildi! 🎉");
+
+}
+
+update();newOrder();
+
 </script>
+
 </body>
+
 </html>
